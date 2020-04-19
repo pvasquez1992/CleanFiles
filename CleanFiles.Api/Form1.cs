@@ -16,12 +16,14 @@ namespace CleanFiles.Api
         private string OriginPath;
         private List<string> KillFiles;
         private bool SubDir;
+        private bool CrazyMode; //este modo en TRUE no solo examina duplicidad en carpetas , si no en todo el arbol de archivos. 
         public Form1()
         {
             OriginPath = string.Empty;
-            KillFiles = new List<string>();            
+            KillFiles = new List<string>();
             InitializeComponent();
             SubDir = chkSubFolders.Checked;
+            CrazyMode = false;
         }
 
         private void btnCharge_Click(object sender, EventArgs e)
@@ -35,6 +37,7 @@ namespace CleanFiles.Api
                 Killer kill = new Killer(OriginPath);
                 var listaResult = kill.GetFiles(SubDir);
                 LoadTreeViewData(listaResult, tvData);
+
             }
         }
 
@@ -45,6 +48,8 @@ namespace CleanFiles.Api
             tvData.Nodes.Clear();
             tvRepeats.Nodes.Clear();
             OriginPath = string.Empty;
+            btnCrazy.Image = Properties.Resources.red;
+            CrazyMode = false;
 
         }
 
@@ -139,10 +144,11 @@ namespace CleanFiles.Api
 
                     LoadTreeViewData(KillFiles, tvRepeats);
                 }
-                else {
+                else
+                {
                     MessageBox.Show($"No hay archivos repetidos en ningunta ruta");
-                
-                }             
+
+                }
 
             }
 
@@ -190,6 +196,27 @@ namespace CleanFiles.Api
         private void chkSubFolders_CheckedChanged(object sender, EventArgs e)
         {
             SubDir = chkSubFolders.Checked;
+        }
+
+        private void btnCrazy_Click(object sender, EventArgs e)
+        {
+            if (CrazyMode)
+            {
+                CrazyMode = false;
+                btnCrazy.Image = Properties.Resources.red;
+
+            }
+            else
+            {
+                DialogResult dialogResult = MessageBox.Show($"¿Estas seguro de activar MODO INCEPCION?, \n  *se buscara duplicidad en cada carpeta en el arbol seleccionado.", "Eliminacion Modo Incepción(!)", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    CrazyMode = true;
+
+                    btnCrazy.Image = Properties.Resources.redturn;
+                }
+               
+            }
         }
     }
 }

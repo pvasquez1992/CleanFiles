@@ -40,6 +40,7 @@
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btnPath = new System.Windows.Forms.Button();
             this.chkSubFolders = new System.Windows.Forms.CheckBox();
+            this.btnCrazy = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnCharge
@@ -143,6 +144,22 @@
             this.chkSubFolders.UseVisualStyleBackColor = false;
             this.chkSubFolders.CheckedChanged += new System.EventHandler(this.chkSubFolders_CheckedChanged);
             // 
+            // btnCrazy
+            // 
+            this.btnCrazy.BackColor = System.Drawing.Color.Transparent;
+            this.btnCrazy.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnCrazy.FlatAppearance.BorderSize = 0;
+            this.btnCrazy.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.btnCrazy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.btnCrazy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCrazy.Image = global::CleanFiles.Api.Properties.Resources.red;
+            this.btnCrazy.Location = new System.Drawing.Point(658, 21);
+            this.btnCrazy.Name = "btnCrazy";
+            this.btnCrazy.Size = new System.Drawing.Size(108, 80);
+            this.btnCrazy.TabIndex = 14;
+            this.btnCrazy.UseVisualStyleBackColor = false;
+            this.btnCrazy.Click += new System.EventHandler(this.btnCrazy_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -152,6 +169,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(828, 730);
+            this.Controls.Add(this.btnCrazy);
             this.Controls.Add(this.chkSubFolders);
             this.Controls.Add(this.btnPath);
             this.Controls.Add(this.label3);
@@ -186,6 +204,7 @@
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.Button btnPath;
         private System.Windows.Forms.CheckBox chkSubFolders;
+        private System.Windows.Forms.Button btnCrazy;
     }
 }
 
