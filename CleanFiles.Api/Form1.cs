@@ -16,14 +16,14 @@ namespace CleanFiles.Api
         private string OriginPath;
         private List<string> KillFiles;
         private bool SubDir;
-        private bool CrazyMode; //este modo en TRUE no solo examina duplicidad en carpetas , si no en todo el arbol de archivos. 
+        private bool InceptionMode; //este modo en TRUE no solo examina duplicidad en carpetas , si no en todo el arbol de archivos. 
         public Form1()
         {
             OriginPath = string.Empty;
             KillFiles = new List<string>();
             InitializeComponent();
             SubDir = chkSubFolders.Checked;
-            CrazyMode = false;
+            InceptionMode = false;
         }
 
         private void btnCharge_Click(object sender, EventArgs e)
@@ -48,8 +48,8 @@ namespace CleanFiles.Api
             tvData.Nodes.Clear();
             tvRepeats.Nodes.Clear();
             OriginPath = string.Empty;
-            btnCrazy.Image = Properties.Resources.red;
-            CrazyMode = false;
+            btnModeIncepcion.Image = Properties.Resources.red;
+            InceptionMode = false;
 
         }
 
@@ -200,10 +200,10 @@ namespace CleanFiles.Api
 
         private void btnCrazy_Click(object sender, EventArgs e)
         {
-            if (CrazyMode)
+            if (InceptionMode)
             {
-                CrazyMode = false;
-                btnCrazy.Image = Properties.Resources.red;
+                InceptionMode = false;
+                btnModeIncepcion.Image = Properties.Resources.red;
 
             }
             else
@@ -211,9 +211,9 @@ namespace CleanFiles.Api
                 DialogResult dialogResult = MessageBox.Show($"¿Estas seguro de activar MODO INCEPCION?, \n  *se buscara duplicidad en cada carpeta en el arbol seleccionado.", "Eliminacion Modo Incepción(!)", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    CrazyMode = true;
+                    InceptionMode = true;
 
-                    btnCrazy.Image = Properties.Resources.redturn;
+                    btnModeIncepcion.Image = Properties.Resources.redturn;
                 }
                
             }
