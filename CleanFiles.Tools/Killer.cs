@@ -41,26 +41,42 @@ namespace CleanFiles.Tools
             return fileEntries.Select(x => x).ToList();
 
         }
-        public List<string> GetFiles(bool opt = false )
+        public List<string> GetFiles(bool opt = false)
         {
 
             string root = Path;
 
-            string[] fileEntries = null;
+            List<string> fileEntries = null;
 
-            if (opt) {
-                 fileEntries = Directory.GetFiles(root, "*.*", SearchOption.AllDirectories);
-            }else {
-                 fileEntries = Directory.GetFiles(root);
-            }            
-       
-            foreach (string fileName in fileEntries)
+            if (opt)
             {
-                Console.WriteLine(fileName);
+                fileEntries = Directory.GetFiles(root, "*.*", SearchOption.AllDirectories).ToList();
             }
-            
+            else
+            {
+                fileEntries = Directory.GetFiles(root).ToList();
+            }
 
             return fileEntries.Select(x => x).ToList();
+
+        }
+        public List<FileInfo> GetFilesInfo(bool opt = false)
+        {
+
+            string root = Path;
+
+            List<string> fileEntries = null;
+
+            if (opt)
+            {
+                fileEntries = Directory.GetFiles(root, "*.*", SearchOption.AllDirectories).ToList();
+            }
+            else
+            {
+                fileEntries = Directory.GetFiles(root).ToList();
+            }
+
+            return fileEntries.Select(x => new FileInfo(x)).ToList();
 
         }
 
@@ -106,7 +122,7 @@ namespace CleanFiles.Tools
 
             }
             stream.Close();
-            
+
             return hash;
 
         }
@@ -134,7 +150,7 @@ namespace CleanFiles.Tools
                 catch (Exception ex)
                 {
 
-                    messageResponse += $"Error  {ex.Message} al eliminar {file} \n" ; 
+                    messageResponse += $"Error  {ex.Message} al eliminar {file} \n";
                 }
 
 
@@ -150,7 +166,7 @@ namespace CleanFiles.Tools
 
         public void Dispose()
         {
-         
+
         }
     }
 
@@ -158,5 +174,13 @@ namespace CleanFiles.Tools
     {
         public string Hash { get; set; }
         public string Value { get; set; }
+    }
+
+    public class CustomFile
+    {
+        public string PathFullName { get; set; }
+        public string Path { get; set; }
+        public string FileName { get; set; }
+        public CustomFile() { }
     }
 }
