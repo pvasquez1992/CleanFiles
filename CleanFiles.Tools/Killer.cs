@@ -110,6 +110,38 @@ namespace CleanFiles.Tools
             return result;
         }
 
+
+        public List<FileInfo> EvaluateFileInfoListDuplicated(List<string> list)
+        {
+            List<FileInfo> result = new List<FileInfo>();
+            List<Item> listEnc = new List<Item>();
+            list.AsParallel();
+
+            Parallel.ForEach(list, (item) =>
+            {
+
+                var hsh = createHashMD5(item);
+                listEnc.Add(new Item() { Hash = hsh, Value = item });
+
+            });
+
+
+            var Repetidos = listEnc.GroupBy(x => x.Hash).Select(t => new { Hash = t.Key, Items = t.Select(o => o.Value).ToList() }).Where(h => h.Items.Count > 1).ToList();
+            var ToKillFromItem = Repetidos.Select(j => j.Items.OrderByDescending(ord => ord.Length).Take(j.Items.Count - 1)).ToList().Select(x => x.ToList()).ToList();
+
+
+            ToKillFromItem.ForEach((item) =>
+            {
+                result.AddRange(item.Select(x => new FileInfo(x)));
+            });
+
+
+
+
+            return result;
+        }
+
+
         private string createHashMD5(string cadena)
         {
             string hash = "";
