@@ -64,8 +64,10 @@ namespace CleanFiles.Api
             var mainFolder = path.Split('\\').Select(x => x).LastOrDefault();
             currentPath = mainFolder;
 
-            TreeNode treeNode = new TreeNode(mainFolder);
 
+            TreeNode treeNode = new TreeNode(mainFolder);
+            treeNode.Name = path;
+            
             if (lista == null)
             {
                 // lista = new Killer(path).GetFiles(SubDir);
@@ -81,10 +83,13 @@ namespace CleanFiles.Api
 
         private void LoadSubNodes(List<FileInfo> sources, TreeNode treeNode, int mode)
         {
-            //var lista = sources.Select(x => x.Replace(path, "").Remove(0, 1).TrimEnd().Split('\\')).ToList().GroupBy(x => x[0]).Select(y => y.ToList()).ToList();
 
-            var agregados = sources.Where(o => o.Directory.Name.Equals(treeNode.Text)).ToList();
-
+            if (sources.Count == 0)
+            {
+                return;
+                    
+            }
+            var agregados = sources.Where(o => o.Directory.FullName.Equals(treeNode.Name)).ToList();
 
             agregados.ForEach((item) => treeNode.Nodes.Add(item.Name));
 
@@ -93,6 +98,7 @@ namespace CleanFiles.Api
             var listaClear = sources.Where(i => !agregados.Select(x => x.FullName).ToList().Contains(i.FullName)).OrderByDescending(x => x.FullName).ToList();
 
             var lista = listaClear.GroupBy(u => u.DirectoryName).OrderBy(x => x.Key).ToList();
+
 
 
             foreach (var file in lista)
@@ -105,6 +111,7 @@ namespace CleanFiles.Api
                 {
                     var txtNode = items[0].Directory.Name;
                     var nd = new TreeNode(txtNode);
+                    nd.Name = temPath;
                     treeNode.Nodes.Add(nd);
 
                    LoadSubNodes(listaClear, nd, mode);
