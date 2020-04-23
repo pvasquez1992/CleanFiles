@@ -8,79 +8,77 @@ using System.Threading.Tasks;
 
 namespace CleanFiles.Tools
 {
-    public class Killer : IDisposable
+    public class Killer
     {
 
         private string Path;
-
         public Killer()
         {
             Path = string.Empty;
 
         }
-
         public Killer(string path)
         {
             Path = path;
 
         }
-
-        public List<string> GetFilesFilesNameByPath(string _path = "")
+        public List<string> GetFiles(bool opt = false)
         {
 
-            _path = string.IsNullOrEmpty(_path) ? Path : _path;
-
-
             string root = Path;
-            string[] fileEntries = Directory.GetFiles(root);
-            foreach (string fileName in fileEntries)
+
+            List<string> fileEntries = null;
+
+            if (opt)
             {
-                Console.WriteLine(fileName);
+                fileEntries = Directory.GetFiles(root, "*.*", SearchOption.AllDirectories).ToList();
+            }
+            else
+            {
+                fileEntries = Directory.GetFiles(root).ToList();
             }
 
             return fileEntries.Select(x => x).ToList();
 
         }
-        public List<string> GetFiles(bool opt = false )
+        public List<FileInfo> GetFilesInfo(bool opt = false)
         {
 
             string root = Path;
 
-            string[] fileEntries = null;
+            List<string> fileEntries = null;
 
-            if (opt) {
-                 fileEntries = Directory.GetFiles(root, "*.*", SearchOption.AllDirectories);
-            }else {
-                 fileEntries = Directory.GetFiles(root);
-            }            
-       
-            foreach (string fileName in fileEntries)
+            if (opt)
             {
-                Console.WriteLine(fileName);
+                fileEntries = Directory.GetFiles(root, "*.*", SearchOption.AllDirectories).ToList();
             }
-            
+            else
+            {
+                fileEntries = Directory.GetFiles(root).ToList();
+            }
 
-            return fileEntries.Select(x => x).ToList();
+            return fileEntries.Select(x => new FileInfo(x)).ToList();
 
         }
-
-        public List<string> EvaluateListDuplicated(List<string> list)
+        public List<FileInfo> EvaluateFileInfoListDuplicated(List<string> list)
         {
-            List<string> result = new List<string>();
+            List<FileInfo> result = new List<FileInfo>();
             List<Item> listEnc = new List<Item>();
             list.AsParallel();
 
             Parallel.ForEach(list, (item) =>
-           {
+            {
 
-               var hsh = createHashMD5(item);
-               listEnc.Add(new Item() { Hash = hsh, Value = item });
+                var hsh = createHashMD5(item);
+                listEnc.Add(new Item() { Hash = hsh, Value = item });
 
-           });
+            });
 
 
             var Repetidos = listEnc.GroupBy(x => x.Hash).Select(t => new { Hash = t.Key, Items = t.Select(o => o.Value).ToList() }).Where(h => h.Items.Count > 1).ToList();
-            var ToKillFromItem = Repetidos.Select(j => j.Items.OrderByDescending(ord => ord.Length).Take(j.Items.Count - 1)).ToList().Select(x => x.ToList()).ToList();
+
+            var ToKillFromItem = Repetidos.Select(j => j.Items.Select(u => new FileInfo(u)).OrderByDescending(ord => ord.CreationTime).Take(j.Items.Count - 1)).ToList().Select(x => x.ToList()).ToList();
+            //var ToKillFromItem = Repetidos.Select(j => j.Items.OrderByDescending(ord => ord.Length).Take(j.Items.Count - 1)).ToList().Select(x => x.ToList()).ToList();
 
 
             ToKillFromItem.ForEach((item) =>
@@ -88,12 +86,8 @@ namespace CleanFiles.Tools
                 result.AddRange(item.Select(x => x));
             });
 
-
-
-
             return result;
         }
-
         private string createHashMD5(string cadena)
         {
             string hash = "";
@@ -106,12 +100,11 @@ namespace CleanFiles.Tools
 
             }
             stream.Close();
-            
+
             return hash;
 
         }
-
-        public Item DeleteFileList(List<string> lista)
+        public Item DeleteFileList(List<FileInfo> lista)
         {
             Item item = new Item();
             int count = 0;
@@ -122,9 +115,9 @@ namespace CleanFiles.Tools
 
                 try
                 {
-                    if (File.Exists(file))
+                    if (File.Exists(file.FullName))
                     {
-                        File.Delete(file);
+                        File.Delete(file.FullName);
 
                         count += 1;
 
@@ -134,7 +127,7 @@ namespace CleanFiles.Tools
                 catch (Exception ex)
                 {
 
-                    messageResponse += $"Error  {ex.Message} al eliminar {file} \n" ; 
+                    messageResponse += $"Error  {ex.Message} al eliminar {file} \n";
                 }
 
 
@@ -147,11 +140,6 @@ namespace CleanFiles.Tools
 
 
         }
-
-        public void Dispose()
-        {
-         
-        }
     }
 
     public class Item
@@ -160,3 +148,4 @@ namespace CleanFiles.Tools
         public string Value { get; set; }
     }
 }
+

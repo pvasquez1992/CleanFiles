@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,16 +15,17 @@ namespace CleanFiles.Api
     public partial class Form1 : Form
     {
         private string OriginPath;
-        private List<string> KillFiles;
+        private List<FileInfo> KillList;
         private bool SubDir;
         private bool InceptionMode; //este modo en TRUE no solo examina duplicidad en carpetas , si no en todo el arbol de archivos. 
+
         public Form1()
         {
-            OriginPath = string.Empty;
-            KillFiles = new List<string>();
+            OriginPath = string.Empty;        
             InitializeComponent();
             SubDir = chkSubFolders.Checked;
-            InceptionMode = false;
+            InceptionMode = false;    
+            KillList = new List<FileInfo>();
         }
 
         private void btnCharge_Click(object sender, EventArgs e)
@@ -35,89 +37,83 @@ namespace CleanFiles.Api
                 OriginPath = txtPath.Text.Trim();
 
                 Killer kill = new Killer(OriginPath);
-                var listaResult = kill.GetFiles(SubDir);
+                var listaResult = kill.GetFilesInfo(SubDir);
                 LoadTreeViewData(listaResult, tvData);
-
             }
         }
 
 
         private void ClearMe()
         {
-
             tvData.Nodes.Clear();
             tvRepeats.Nodes.Clear();
             OriginPath = string.Empty;
             btnModeIncepcion.Image = Properties.Resources.red;
             InceptionMode = false;
-
+            KillList = new List<FileInfo>();        
         }
 
-        private void LoadTreeViewData(List<string> lista, TreeView tv)
+        private void LoadTreeViewData(List<FileInfo> lista, TreeView tv, int mode = 0)
         {
             var path = txtPath.Text.TrimEnd('\\');
             var mainFolder = path.Split('\\').Select(x => x).LastOrDefault();
-
+     
             TreeNode treeNode = new TreeNode(mainFolder);
+            treeNode.Name = path;
 
-            if (lista == null)
-            {
-                lista = new Killer(path).GetFiles(SubDir);
-            }
-
-
-            LoadSubNodes(lista, path, treeNode);
+            LoadSubNodes(lista, treeNode, mode);
             tv.Nodes.Add(treeNode);
         }
-
-
-
-        private void LoadSubNodes(List<string> sources, string path, TreeNode treeNode)
+        private void LoadSubNodes(List<FileInfo> sources, TreeNode treeNode, int mode)
         {
 
-            var lista = sources.Select(x => x.Replace(path, "").Remove(0, 1).TrimEnd().Split('\\')).ToList().GroupBy(x => x[0]).Select(y => y.ToList()).ToList();
-
-            var agregados = lista.Where(x => x.Count.Equals(1)).Select(j => new TreeNode(j[0][0])).ToList();
-
-            agregados.ForEach((item) => treeNode.Nodes.Add(item));
-
-            foreach (var sublist in lista)
+            if (sources.Count != 0)
             {
-                var item = sublist.ToList();
+                var agregados = sources.Where(o => o.Directory.FullName.Equals(treeNode.Name)).ToList();
 
-                if (item.Count > 1)
-                {
-                    var tempath = '\\' + item[0][0];
-                    var newpath = path + tempath;
+                agregados.ForEach((item) => treeNode.Nodes.Add(item.Name));
 
-                    List<string> newList = new List<string>();
-
-                    item.ForEach((val) =>
-                    {
-                        var temp = val.ToList();
-                        string dir = "";
-                        temp.ForEach((cad) => dir += '\\' + cad);
-                        newList.Add(dir);
-                    }
-                    );
-                    var nd = new TreeNode(tempath.Replace('\\', ' ').TrimStart());
-                    treeNode.Nodes.Add(nd);
-                    LoadSubNodes(newList, tempath, nd);
-
-
+                if (mode.Equals(0)) {
+                    var repetidos = new Killer().EvaluateFileInfoListDuplicated(agregados.Select(x => x.FullName).ToList()).ToList();
+                    KillList.AddRange(repetidos);
                 }
 
+                var listaClear = sources.Where(i => !agregados.Select(x => x.FullName).ToList().Contains(i.FullName)).OrderByDescending(x => x.FullName).ToList();
+
+                var lista = listaClear.GroupBy(u => u.DirectoryName.Replace(treeNode.Name, "").Split('\\')[1]).OrderBy(x => x.Key).ToList();
 
 
 
+                foreach (var file in lista)
+                {
+
+                    var items = file.Select(x => x).ToList();
+                    var vll = items.Where(o => o.Directory.Name.Equals(file.Key)).Select(i => i.DirectoryName).FirstOrDefault();
+
+                    if (vll is null)
+                    {
+                        var temPath = treeNode.Name + '\\' + file.Key;
+                        var txtNode = file.Key;
+                        var nd = new TreeNode(txtNode);
+                        nd.Name = temPath;
+                        treeNode.Nodes.Add(nd);
+                        LoadSubNodes(items, nd, mode);
+                    }
+                    else {
+
+                        if (items.Count >= 1)
+                        {
+                            var temPath = vll;
+                            var txtNode = file.Key;
+                            var nd = new TreeNode(txtNode);
+                            nd.Name = temPath;
+                            treeNode.Nodes.Add(nd);
+
+                            LoadSubNodes(items, nd, mode);
+                        }
+                    }  
+                }
             }
-
-
-
-
-
-
-
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -133,36 +129,36 @@ namespace CleanFiles.Api
                 Killer kill = new Killer(OriginPath);
                 var rptList = kill.GetFiles(SubDir);
 
-
                 Cursor = Cursors.WaitCursor;
-                KillFiles = kill.EvaluateListDuplicated(rptList);
+
+
+                if (InceptionMode)
+                {
+                    KillList = new List<FileInfo>();
+                    KillList.AddRange(kill.EvaluateFileInfoListDuplicated(rptList));
+                }
+
                 Cursor = Cursors.Default;
 
-                if (KillFiles.Count > 0)
+                if (KillList.Count > 0)
                 {
-
-
-                    LoadTreeViewData(KillFiles, tvRepeats);
+                    LoadTreeViewData(KillList, tvRepeats, 1);
                 }
                 else
                 {
                     MessageBox.Show($"No hay archivos repetidos en ningunta ruta");
-
                 }
-
             }
-
-
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = MessageBox.Show($"¿Estas segurdo de elimnar estos {KillFiles.Count} archivo(s) ?", "Eliminacion(!)", MessageBoxButtons.YesNo);
+            DialogResult dialogResult = MessageBox.Show($"¿Estas segurdo de elimnar estos {KillList.Count} archivo(s) ?", "Eliminacion(!)", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
 
                 Killer kill = new Killer();
-                var result = kill.DeleteFileList(KillFiles);
+                var result = kill.DeleteFileList(KillList);
 
                 MessageBox.Show($"Se eliminaron {result.Hash} archivos");
                 if (!string.IsNullOrEmpty(result.Value))
@@ -171,7 +167,7 @@ namespace CleanFiles.Api
                 }
 
                 tvRepeats.Nodes.Clear();
-                KillFiles = new List<string>();
+                KillList = new List<FileInfo>();
             }
 
         }
@@ -189,8 +185,6 @@ namespace CleanFiles.Api
             {
                 txtPath.Text = path;
             }
-
-
         }
 
         private void chkSubFolders_CheckedChanged(object sender, EventArgs e)
@@ -215,7 +209,7 @@ namespace CleanFiles.Api
 
                     btnModeIncepcion.Image = Properties.Resources.redturn;
                 }
-               
+
             }
         }
     }
