@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("CleanFiles.Api")]
+[assembly: AssemblyTitle("FormDB")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CleanFiles.Api")]
+[assembly: AssemblyProduct("FormDB")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // El siguiente GUID sirve como id. de typelib si este proyecto se expone a COM.
-[assembly: Guid("f17dd319-cf68-41b3-bb95-2d5f175ff4be")]
+[assembly: Guid("1918a02c-7c06-48a5-ac26-0d0a1e705a5f")]
 
 // La información de versión de un ensamblado consta de los cuatro valores siguientes:
 //

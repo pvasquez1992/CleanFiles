@@ -1,13 +1,9 @@
 ﻿using CleanFiles.Tools;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CleanFiles.Api
@@ -21,10 +17,10 @@ namespace CleanFiles.Api
 
         public Form1()
         {
-            OriginPath = string.Empty;        
+            OriginPath = string.Empty;
             InitializeComponent();
             SubDir = chkSubFolders.Checked;
-            InceptionMode = false;    
+            InceptionMode = false;
             KillList = new List<FileInfo>();
         }
 
@@ -50,14 +46,14 @@ namespace CleanFiles.Api
             OriginPath = string.Empty;
             btnModeIncepcion.Image = Properties.Resources.red;
             InceptionMode = false;
-            KillList = new List<FileInfo>();        
+            KillList = new List<FileInfo>();
         }
 
         private void LoadTreeViewData(List<FileInfo> lista, TreeView tv, int mode = 0)
         {
             var path = txtPath.Text.TrimEnd('\\');
             var mainFolder = path.Split('\\').Select(x => x).LastOrDefault();
-     
+
             TreeNode treeNode = new TreeNode(mainFolder);
             treeNode.Name = path;
 
@@ -73,7 +69,8 @@ namespace CleanFiles.Api
 
                 agregados.ForEach((item) => treeNode.Nodes.Add(item.Name));
 
-                if (mode.Equals(0)) {
+                if (mode.Equals(0))
+                {
                     var repetidos = new Killer().EvaluateFileInfoListDuplicated(agregados.Select(x => x.FullName).ToList()).ToList();
                     KillList.AddRange(repetidos);
                 }
@@ -99,7 +96,8 @@ namespace CleanFiles.Api
                         treeNode.Nodes.Add(nd);
                         LoadSubNodes(items, nd, mode);
                     }
-                    else {
+                    else
+                    {
 
                         if (items.Count >= 1)
                         {
@@ -111,7 +109,7 @@ namespace CleanFiles.Api
 
                             LoadSubNodes(items, nd, mode);
                         }
-                    }  
+                    }
                 }
             }
         }
