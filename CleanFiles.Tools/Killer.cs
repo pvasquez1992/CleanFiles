@@ -140,6 +140,11 @@ namespace CleanFiles.Tools
 
 
         }
+		
+		public void doSomeProgrammingStuff()
+		{
+			////do your programming stuff here
+		}
     }
 
     public class Item
