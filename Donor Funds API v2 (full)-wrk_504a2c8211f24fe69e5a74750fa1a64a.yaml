@@ -1,0 +1,508 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Donor Funds API v2 (full)
+meta:
+  id: wrk_504a2c8211f24fe69e5a74750fa1a64a
+  created: 1790264375745
+  modified: 1790264375745
+  description: ""
+collection:
+  - name: Donors
+    meta:
+      id: fld_57ce4890c2aa49fc878ff5deb86b7b20
+      created: 1790264375746
+      modified: 1790264850492
+      sortKey: -1000
+      description: "Endpoints multi business partner. Scope DonorFundScope / role
+        DonorFundRole. businessPartnerIds: max 25, duplicados se ignoran."
+    children:
+      - url: "{{ _.baseUrl }}/api/v2/donors/funds"
+        name: GET Funds
+        meta:
+          id: req_e27cda13d1e94b2191883d8ad5facd8b
+          created: 1790264375747
+          modified: 1790264878255
+          isPrivate: false
+          description: |-
+            GET /api/v2/donors/funds
+
+            Requerido: businessPartnerIds (repetir el parametro para enviar varios, max 25).
+            Opcionales: consolidate (def false; true consolida los fondos compartidos por Fund Code), search, expand (sectors|fundTotals), fromCreationDate, toCreationDate (M/d/yyyy o yyyy-MM-dd), status (active|terminate|expired), page (def 1), pageSize (def 10, max 50), sortBy (fundName|fundCode|fundType|creationDate|closedDate|fundCurrency|status, def fundName), order (asc|desc, def asc)
+          sortKey: -1000
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "600000"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: search
+            value: climate
+            disabled: true
+          - name: expand
+            value: sectors
+            disabled: true
+          - name: expand
+            value: fundTotals
+            disabled: true
+          - name: fromCreationDate
+            value: 2020-01-01
+            disabled: true
+          - name: toCreationDate
+            value: 2025-12-31
+            disabled: true
+          - name: status
+            value: active
+            disabled: true
+          - name: sortBy
+            value: creationDate
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v2/donors/funds/summary"
+        name: GET Funds Summary
+        meta:
+          id: req_940ef3dd92c940d687b70c7d613a3eb0
+          created: 1790264375748
+          modified: 1790264883410
+          isPrivate: false
+          description: >-
+            GET /api/v2/donors/funds/summary
+
+
+            Requerido: businessPartnerIds.
+
+            Opcionales: consolidate (true = un solo item en data, sin duplicar
+            fondos compartidos), fundCode.
+
+
+            Los BP sin fondos que matcheen los filtros vuelven en notFound. El
+            404 solo aparece si NINGUN BP tiene fondos.
+          sortKey: -990
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "600000"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: fundCode
+            value: "{{ _.fundCode }}"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v2/donors/project-specific-grants"
+        name: GET Project-Specific Grants
+        meta:
+          id: req_84b1cb8284884ab3a8dd5d56a40731d3
+          created: 1790264375749
+          modified: 1790264952886
+          isPrivate: false
+          description: >-
+            GET /api/v2/donors/project-specific-grants
+
+
+            Requerido: businessPartnerIds.
+
+            Opcionales: consolidate, search, fromApprovalDate, toApprovalDate,
+            status (preparation|approved|eligibility|disbursing|closed), page
+            (def 1), pageSize (def 10, max 50), sortBy
+            (projectName|projectNumber|status|approvalDate, def projectName),
+            order (asc|desc)
+          sortKey: -970
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "600128"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: search
+            value: water
+            disabled: true
+          - name: fromApprovalDate
+            value: 2021-01-01
+            disabled: true
+          - name: toApprovalDate
+            value: 2025-12-31
+            disabled: true
+          - name: status
+            value: disbursing
+            disabled: true
+          - name: sortBy
+            value: approvalDate
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v2/donors/fund-projects-summary"
+        name: GET Fund Projects Summary
+        meta:
+          id: req_c36978f8405849d1b99858aba40c44c8
+          created: 1790264375749
+          modified: 1790264956981
+          isPrivate: false
+          description: >-
+            GET /api/v2/donors/fund-projects-summary
+
+
+            Requeridos: businessPartnerIds y fundCodes (ambos admiten varios
+            valores).
+
+            Opcional: consolidate (def false = un summary por BP; true = un solo
+            summary consolidado).
+
+
+            Respuesta: data[] con businessPartnerIds, fundCodes,
+            totalFundContributions, totalCurrentApproved, totalDisbursed,
+            businessPartnerSummary (myPledged, myContributions).
+          sortKey: -980
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "600000"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: fundCodes
+            value: "{{ _.fundCode }}"
+            disabled: false
+          - name: fundCodes
+            value: ""
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v2/donors/project-specific-grants/summary"
+        name: GET Project-Specific Grants Summary
+        meta:
+          id: req_d21bbda1bcd04a7e9b6b433110f507f2
+          created: 1790264375750
+          modified: 1790264375750
+          isPrivate: false
+          description: >-
+            GET /api/v2/donors/project-specific-grants/summary
+
+
+            Requerido: businessPartnerIds.
+
+            Opcional: consolidate.
+
+
+            Respuesta: data[] con businessPartnerIds, totalProjectsFunded,
+            myContributions + notFound[].
+          sortKey: -960
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "600000"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v2/donors/project-specific-grants/by-sector"
+        name: GET Project-Specific Grants By Sector
+        meta:
+          id: req_36531c4526d645a5b80a0995bf91fdd7
+          created: 1790264375751
+          modified: 1790264375751
+          isPrivate: false
+          description: >-
+            GET /api/v2/donors/project-specific-grants/by-sector
+
+
+            Requerido: businessPartnerIds.
+
+            Opcionales: consolidate, page (def 1), pageSize (def 10, max 50),
+            sortBy (sectorName|projectCount|percentage, def projectCount), order
+            (asc|desc, def desc)
+
+
+            OJO: page/pageSize paginan los GRUPOS (uno por BP, o uno solo con
+            consolidate=true), no los sectores dentro de cada grupo. sortBy
+            ordena los sectores de cada grupo.
+          sortKey: -950
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "600000"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: sortBy
+            value: projectCount
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v2/donors/project-specific-grants/in-execution"
+        name: GET Project-Specific Grants In Execution
+        meta:
+          id: req_e75e9463da014f9484652718caf41102
+          created: 1790264375752
+          modified: 1790264375752
+          isPrivate: false
+          description: >-
+            GET /api/v2/donors/project-specific-grants/in-execution
+
+
+            Requerido: businessPartnerIds.
+
+            Opcionales: consolidate, search, page (def 1), pageSize (def 10, max
+            50), sortBy (projectName|projectNumber|status|approvalDate segun el
+            swagger), order (asc|desc)
+
+
+            OJO: el swagger publicado devuelve todavia el DTO V1 (donorId en la
+            raiz y businessPartnerIds como array de string). En el codigo ya
+            existe el response V2 propio, asi que la respuesta real puede
+            diferir del swagger.
+          sortKey: -940
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "600000"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: search
+            value: water
+            disabled: true
+          - name: sortBy
+            value: projectName
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v2/donors/projects/by-country"
+        name: GET Projects By Country (aun no en swagger)
+        meta:
+          id: req_65fd8867557243b2adc60c70bebd46aa
+          created: 1790264375753
+          modified: 1790264375753
+          isPrivate: false
+          description: >-
+            GET /api/v2/donors/projects/by-country
+
+
+            Requerido: businessPartnerIds.
+
+            Opcional: consolidate.
+
+
+            OJO: este endpoint existe en el controller V2 del codigo pero NO
+            aparece en el swagger v2 del ambiente dev. Si tira 404, todavia no
+            esta desplegado.
+          sortKey: -930
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "600000"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    authentication:
+      type: oauth2
+      grantType: client_credentials
+      accessTokenUrl: "{{ _.tokenUrl }}"
+      authorizationUrl: "{{ _.tokenUrl }}"
+      clientId: "{{ _.clientId }}"
+      clientSecret: "{{ _.clientSecret }}"
+      scope: "{{ _.scope }}"
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_01bfca5059508a4c47116ec58cab7abb9cd89d5a
+    created: 1790264384839
+    modified: 1790264862989
+  cookies:
+    - id: d6a87122-7e7d-4658-b3ea-24d711e21513
+      key: fpc
+      value: Ajd8I4PeKrRLq7yNxSsmQuxvvbMfAQAAAB09R-IOAAAA
+      domain: login.microsoftonline.com
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
+    - id: 10ffa661-d50a-47ed-8904-18389bc47211
+      key: x-ms-gateway-slice
+      value: estsfd
+      domain: login.microsoftonline.com
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
+    - id: 81f564ff-ff42-4769-912d-92b1beeacd87
+      key: stsservicecookie
+      value: estsfd
+      domain: login.microsoftonline.com
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
+environments:
+  name: Base Environment
+  meta:
+    id: env_e4f54f8356844548b6a5c0015dd701d3
+    created: 1790264375746
+    modified: 1790264375746
+    isPrivate: false
+  data:
+    baseUrl: https://api-np-d-app-service-fundscsdf.azurewebsites.net
+    token: ""
+    fundCode: ""

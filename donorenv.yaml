@@ -1,0 +1,54 @@
+type: environment.insomnia.rest/5.0
+schema_version: "5.1"
+name: DonorEnv
+meta:
+  id: wrk_f5a3455e85f943f08892806bc4987e82
+  created: 1790264447300
+  modified: 1790264447300
+  description: ""
+environments:
+  name: Base
+  meta:
+    id: env_0de5445932028b919d50cf4471dc4fbb644b4727
+    created: 1790264447302
+    modified: 1790264664738
+    isPrivate: false
+  data:
+    baseUrl: ""
+    token: ""
+    tenantId: ""
+    clientId: ""
+    clientSecret: ""
+    scope: ""
+    tokenUrl: https://login.microsoftonline.com/9dfb1a05-5f1d-449a-8960-62abcb479e7d/oauth2/v2.0/token
+  subEnvironments:
+    - name: dev
+      meta:
+        id: env_c7c7c26d801448d3803141f904a3cd8d
+        created: 1790264668560
+        modified: 1790264728801
+        isPrivate: false
+        sortKey: 1790264668560
+      data:
+        baseUrl: https://api-np-d-app-service-fundscsdf.azurewebsites.net/
+        token: ""
+        tenantId: 9dfb1a05-5f1d-449a-8960-62abcb479e7d
+        clientId: 52018dcb-c01e-48dd-b76a-bdd44262c568
+        clientSecret: g9h8Q~D-on4gJ74w1RAK7R6oKLlJOy7SPKPYodvn
+        scope: api://b6c34eff-f6a4-4db4-8ef5-50adcc07f85a/.default
+        tokenUrl: https://login.microsoftonline.com/9dfb1a05-5f1d-449a-8960-62abcb479e7d/oauth2/v2.0/token
+    - name: test
+      meta:
+        id: env_4f121b558d9b4203a60fc9290759ac78
+        created: 1790264689371
+        modified: 1790264747061
+        isPrivate: false
+        sortKey: 1790264689371
+      data:
+        baseUrl: https://api-np-d-app-service-fundscsdf.azurewebsites.net/
+        token: ""
+        tenantId: 9dfb1a05-5f1d-449a-8960-62abcb479e7d
+        clientId: 2c6fd093-623e-4106-8970-13316118f6f8
+        clientSecret: Wws8Q~ZFFH3bedg31aoLHdRxdHOw374KFNRCvdgm
+        scope: api://257bae25-2485-40d4-8ff1-4993b70ad9f9/.default
+        tokenUrl: https://login.microsoftonline.com/9dfb1a05-5f1d-449a-8960-62abcb479e7d/oauth2/v2.0/token

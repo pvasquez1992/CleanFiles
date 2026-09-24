@@ -1,0 +1,761 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Donor Funds API v1
+meta:
+  id: wrk_23948664f58b41889897b5bb153bfe89
+  created: 1790264375762
+  modified: 1790264375762
+  description: ""
+collection:
+  - name: Donors
+    meta:
+      id: fld_a1763c450d1a4147a2df58a14ad146e9
+      created: 1790264375775
+      modified: 1790265075449
+      sortKey: -1000
+      description: Endpoints por donorId. Scope DonorFundScope / role DonorFundRole.
+    children:
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/funds"
+        name: GET Funds
+        meta:
+          id: req_55951e08cccb40ecb648173175736363
+          created: 1790264375777
+          modified: 1790264375777
+          isPrivate: false
+          description: >-
+            GET /api/v1/donors/{donorId}/funds
+
+
+            Listado paginado de fondos del donante.
+
+
+            Opcionales: search, expand (sectors|fundTotals), fromCreationDate,
+            toCreationDate (M/d/yyyy o yyyy-MM-dd), status
+            (active|terminate|expired), page (def 1), pageSize (def 10, max 50),
+            sortBy (fundName|fundCode|fundType|creationDate|status), order
+            (asc|desc, def asc)
+
+
+            OJO: el swagger lista closedDate y fundCurrency como sortBy validos,
+            pero el validator del codigo solo acepta fundName, fundCode,
+            fundType, creationDate y status.
+          sortKey: -1000
+        method: GET
+        parameters:
+          - name: search
+            value: climate
+            disabled: true
+          - name: expand
+            value: sectors
+            disabled: true
+          - name: expand
+            value: fundTotals
+            disabled: true
+          - name: fromCreationDate
+            value: 2020-01-01
+            disabled: true
+          - name: toCreationDate
+            value: 2025-12-31
+            disabled: true
+          - name: status
+            value: active
+            disabled: true
+          - name: sortBy
+            value: creationDate
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/funds/summary"
+        name: GET Funds Summary
+        meta:
+          id: req_6f0a3e227cce41069125d073b5cd4ec5
+          created: 1790264375777
+          modified: 1790264375777
+          isPrivate: false
+          description: |-
+            GET /api/v1/donors/{donorId}/funds/summary
+
+            KPIs de fondos del donante.
+
+            Opcional: fundCode (filtra el summary a un solo fondo).
+          sortKey: -990
+        method: GET
+        parameters:
+          - name: fundCode
+            value: "{{ _.fundCode }}"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/fund-projects-summary"
+        name: GET Fund Projects Summary
+        meta:
+          id: req_1c16c9b3fed34916a4fa7343fd18e809
+          created: 1790264375778
+          modified: 1790264375778
+          isPrivate: false
+          description: >-
+            GET /api/v1/donors/{donorId}/fund-projects-summary
+
+
+            Requerido: fundCodes (uno o varios; repetir el parametro para enviar
+            mas de uno).
+
+
+            Respuesta: donorId, fundCodes[], totalFundContributions,
+            totalCurrentApproved, totalDisbursed, donorSummary (myPledged,
+            myContributions).
+          sortKey: -970
+        method: GET
+        parameters:
+          - name: fundCodes
+            value: "{{ _.fundCode }}"
+            disabled: false
+          - name: fundCodes
+            value: ""
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/funds/{{ _.fundCode }}"
+        name: GET Fund Detail
+        meta:
+          id: req_63612ff4109a4789b60f3744432a2bce
+          created: 1790264375778
+          modified: 1790264375778
+          isPrivate: false
+          description: >-
+            GET /api/v1/donors/{donorId}/funds/{fundCode}
+
+
+            Detalle de un fondo.
+
+
+            Ruta: fundCode obligatorio, exactamente 3 caracteres alfanumericos.
+            Cargalo en la variable fundCode del environment.
+
+
+            Respuesta: fundCode, fundName, creationDate, closedDate, fundType,
+            status, sectors[], countries[], idbContactName, idbContactEmail,
+            fundDonors[], agreementFileUrl.
+          sortKey: -980
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/project-specific-grants"
+        name: GET Project-Specific Grants
+        meta:
+          id: req_3ab12b4f3deb4fddb27af4db67f4a603
+          created: 1790264375779
+          modified: 1790264375779
+          isPrivate: false
+          description: >-
+            GET /api/v1/donors/{donorId}/project-specific-grants
+
+
+            Listado paginado de PSG.
+
+
+            Opcionales: search, fromApprovalDate, toApprovalDate, status
+            (preparation|approved|eligibility|disbursing|closed), page (def 1),
+            pageSize (def 10, max 50), sortBy
+            (projectName|projectNumber|status|approvalDate, def projectName),
+            order (asc|desc)
+          sortKey: -960
+        method: GET
+        parameters:
+          - name: search
+            value: water
+            disabled: true
+          - name: fromApprovalDate
+            value: 2021-01-01
+            disabled: true
+          - name: toApprovalDate
+            value: 2025-12-31
+            disabled: true
+          - name: status
+            value: disbursing
+            disabled: true
+          - name: sortBy
+            value: approvalDate
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId
+          }}/project-specific-grants/summary"
+        name: GET Project-Specific Grants Summary
+        meta:
+          id: req_83e4689d27784b069beeedb8a3b76659
+          created: 1790264375780
+          modified: 1790264375780
+          isPrivate: false
+          description: |-
+            GET /api/v1/donors/{donorId}/project-specific-grants/summary
+
+            Sin query params. Devuelve el summary de PSG del donante.
+          sortKey: -950
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId
+          }}/project-specific-grants/in-execution"
+        name: GET Project-Specific Grants In Execution
+        meta:
+          id: req_1b55758c8f7e436290039b373969b872
+          created: 1790264375781
+          modified: 1790264375781
+          isPrivate: false
+          description: >-
+            GET /api/v1/donors/{donorId}/project-specific-grants/in-execution
+
+
+            PSG en ejecucion.
+
+
+            Opcionales: search (nombre y numero de proyecto), page, pageSize,
+            sortBy
+            (projectName|projectNumber|approved|disbursed|pledged|available, def
+            projectName), order (asc|desc)
+
+
+            OJO: los sortBy validos aca NO son los mismos que en el listado de
+            PSG.
+          sortKey: -930
+        method: GET
+        parameters:
+          - name: search
+            value: water
+            disabled: true
+          - name: sortBy
+            value: disbursed
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId
+          }}/project-specific-grants/by-sector"
+        name: GET Project-Specific Grants By Sector
+        meta:
+          id: req_6f1a88009de7402ab1e0d7751e42ff39
+          created: 1790264375781
+          modified: 1790264375781
+          isPrivate: false
+          description: >-
+            GET /api/v1/donors/{donorId}/project-specific-grants/by-sector
+
+
+            PSG agrupados por sector.
+
+
+            Opcionales: page, pageSize, sortBy
+            (projectCount|sectorName|percentage, def projectCount), order
+            (asc|desc)
+          sortKey: -940
+        method: GET
+        parameters:
+          - name: sortBy
+            value: projectCount
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/projects/by-country"
+        name: GET Projects By Country
+        meta:
+          id: req_abcc211122a74cd08aa05eb64a4df75d
+          created: 1790264375781
+          modified: 1790264375781
+          isPrivate: false
+          description: >-
+            GET /api/v1/donors/{donorId}/projects/by-country
+
+
+            Sin query params. Devuelve totalProjects, totalCountries y data[]
+            con countryIdbCode, countryIsoCode, countryName, countrySpanishName,
+            projectCount, percentage.
+          sortKey: -920
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/projects/by-sector"
+        name: GET Projects By Sector
+        meta:
+          id: req_457aa9c1f9af4d9a91fe52e286d21e54
+          created: 1790264375782
+          modified: 1790264375782
+          isPrivate: false
+          description: >-
+            GET /api/v1/donors/{donorId}/projects/by-sector
+
+
+            Sin query params. Devuelve totalProjects, totalSectors y data[] con
+            sectorDetailCode, sectorCode, sectorName, projectCount, percentage.
+          sortKey: -910
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/projects/approval-history"
+        name: GET Projects Approval History
+        meta:
+          id: req_f8ebd537172148daabee4711c5cb4a19
+          created: 1790264375782
+          modified: 1790264375782
+          isPrivate: false
+          description: |-
+            GET /api/v1/donors/{donorId}/projects/approval-history
+
+            Historico de aprobaciones agrupado por anio, paginado.
+
+            Opcionales: page (def 1), pageSize (def 10, max 50), sortBy (approvalYear|approvalCount|sumCurrentApprovedAmountUsd|sumDisbursedAmountUsd, def approvalYear), order (asc|desc, def asc)
+          sortKey: -900
+        method: GET
+        parameters:
+          - name: sortBy
+            value: approvalYear
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    authentication:
+      type: oauth2
+      grantType: client_credentials
+      accessTokenUrl: "{{ _.tokenUrl }}"
+      clientId: "{{ _.clientId }}"
+      clientSecret: "{{ _.clientSecret }}"
+      scope: "{{ _.scope }}"
+  - name: Projects
+    meta:
+      id: fld_13bf022c4e7443578287c53a97eb995c
+      created: 1790264375776
+      modified: 1790265146359
+      sortKey: -800
+      description: Detalle de proyectos por operationNumber.
+    children:
+      - url: "{{ _.baseUrl }}/api/v1/projects/{{ _.operationNumber }}"
+        name: GET Project Detail
+        meta:
+          id: req_2c895b0502f648538cef32e2b2aac676
+          created: 1790264375785
+          modified: 1790264375785
+          isPrivate: false
+          description: >-
+            GET /api/v1/projects/{operationNumber}
+
+
+            Detalle de un proyecto por Operation Number.
+
+
+            Ruta: operationNumber obligatorio (variable operationNumber del
+            environment).
+
+            Query REQUERIDO: fundCode.
+          sortKey: -870
+        method: GET
+        parameters:
+          - name: fundCode
+            value: "{{ _.fundCode }}"
+            disabled: false
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v1/projects/project-specific-grants/{{
+          _.operationNumber }}"
+        name: GET PSG Project Detail
+        meta:
+          id: req_faf7cf3439234f049c62c8abcb08c17e
+          created: 1790264375786
+          modified: 1790264375786
+          isPrivate: false
+          description: >-
+            GET /api/v1/projects/project-specific-grants/{operationNumber}
+
+
+            Detalle de un proyecto PSG por Operation Number.
+
+
+            Ruta: operationNumber obligatorio.
+
+            Query REQUERIDO: donorId.
+
+
+            OJO: el ejemplo del swagger muestra /api/v1/projects-psg/... pero la
+            ruta real es /api/v1/projects/project-specific-grants/...
+          sortKey: -860
+        method: GET
+        parameters:
+          - name: donorId
+            value: "{{ _.donorId }}"
+            disabled: false
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    authentication:
+      type: oauth2
+      grantType: client_credentials
+      accessTokenUrl: "{{ _.tokenUrl }}"
+      clientId: "{{ _.clientId }}"
+      clientSecret: "{{ _.clientSecret }}"
+      scope: "{{ _.scope }}"
+  - name: Funds
+    meta:
+      id: fld_8bc353e65b3d41fc8201825dce651a95
+      created: 1790264375776
+      modified: 1790265118203
+      sortKey: -900
+      description: Endpoints por fundCode.
+    children:
+      - url: "{{ _.baseUrl }}/api/v1/funds/{{ _.fundCode }}/projects"
+        name: GET Fund Projects
+        meta:
+          id: req_db84bf0c3a1a46b9bb498f7f3ab63e73
+          created: 1790264375783
+          modified: 1790265817527
+          isPrivate: false
+          description: >-
+            GET /api/v1/funds/{fundCode}/projects
+
+
+            Listado paginado de proyectos de un fondo (no depende de donorId).
+
+
+            Ruta: fundCode obligatorio (variable fundCode del environment).
+
+            Opcionales: search (nombre o numero de proyecto), page (def 1),
+            pageSize (def 10, max 50)
+          sortKey: -890
+        method: GET
+        parameters:
+          - name: search
+            value: ""
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/funds/{{ _.fundCode }}/difference"
+        name: GET Fund Difference
+        meta:
+          id: req_a9651a3ed8274561a4751651464492da
+          created: 1790264375784
+          modified: 1790264375784
+          isPrivate: false
+          description: >-
+            GET /api/funds/{fundCode}/difference
+
+
+            Diferencias entre SAP, LFM e historico.
+
+
+            OJO: esta ruta NO lleva /v1 (es /api/funds/..., tal cual el
+            swagger).
+
+            Ruta: fundCode obligatorio, solo letras, max 4 caracteres.
+
+
+            Permisos distintos al resto: scope FundsBalanceScope / role
+            FundsBalanceRole.
+
+            Puede responder 409 y 500 ademas de 400/404.
+          sortKey: -880
+        method: GET
+        headers:
+          - name: Accept
+            value: application/json
+        authentication:
+          type: bearer
+          token: "{{ _.token }}"
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    authentication:
+      type: oauth2
+      grantType: client_credentials
+      accessTokenUrl: "{{ _.tokenUrl }}"
+      clientId: "{{ _.clientId }}"
+      clientSecret: "{{ _.clientSecret }}"
+      scope: "{{ _.scope }}"
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_82c4afa4fa297b53240f89733682bd2b8d352fd1
+    created: 1790265022003
+    modified: 1790265851602
+  cookies:
+    - id: 1b8d9a6a-fb27-432e-b234-2cd746e6d65f
+      key: fpc
+      value: AjvkIOrSY4BDtI7LAJJqULVvvbMfAQAAAFhAR-IOAAAAgQVrRgEAAACsQEfiDgAAAA
+      domain: login.microsoftonline.com
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
+    - id: e773ff4c-fcf7-4752-9a3a-cc7ca150f466
+      key: x-ms-gateway-slice
+      value: estsfd
+      domain: login.microsoftonline.com
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
+    - id: c5faebd3-87dd-45f3-9698-ad4fed34ffcf
+      key: stsservicecookie
+      value: estsfd
+      domain: login.microsoftonline.com
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
+environments:
+  name: Base Environment
+  meta:
+    id: env_5073add3537748858005d716e675212f
+    created: 1790264375768
+    modified: 1790265809238
+    isPrivate: false
+  data:
+    token: ""
+    bpId: "600108"
+    bpIds: "[600135,600108]"
+    consolidate: "true"
+    fundCode: MFR
+    fundCodes: KIF
+    search: ""
+    expandSectors: sectors
+    expandFundTotals: fundTotals
+    fundStatus: active
+    psgStatus: disbursing
+    page: "1"
+    pageSize: "10"
+    order: desc
+    sortByFunds: fundName
+    sortByPsg: projectName
+    sortByPsgBySector: projectCount
+    sortByPsgInExecution: projectName
+    donorId: "600135"
+    operationNumber: ""
