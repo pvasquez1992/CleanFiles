@@ -11,7 +11,7 @@ environments:
   meta:
     id: env_0de5445932028b919d50cf4471dc4fbb644b4727
     created: 1790264447302
-    modified: 1790264664738
+    modified: 1790964736242
     isPrivate: false
   data:
     baseUrl: ""
@@ -21,6 +21,25 @@ environments:
     clientSecret: ""
     scope: ""
     tokenUrl: https://login.microsoftonline.com/9dfb1a05-5f1d-449a-8960-62abcb479e7d/oauth2/v2.0/token
+    BussinesParnetIds: "[600108, 600135]"
+    bpIds4: "[600108, 600135,600168]"
+    PSG_BpIds: "[601341,601420]"
+    PSG_2BpIds: "[601410,600184]"
+    BussinesParnetId: "600001"
+    tfDonorId1: "600168"
+    tfFundCode1: KPK
+    tfDonorId2: "600128"
+    tfFundCode2: JSF
+    tfDonorId3: "600140"
+    tfFundCode3: AMZ
+    psgBpId1: "601341"
+    psgBpId2: "601420"
+    fundProjectFundCode: KIF
+    fundProjectContractNumber: ATN/MA-19583-AR
+    projectDetailProjectNumber: BO-T1429
+    projectDetailFundCode: AMZ
+    psgDetailProjectNumber: CO-T1772
+    psgDetailDonorId: "601420"
   subEnvironments:
     - name: dev
       meta:

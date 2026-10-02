@@ -21,7 +21,7 @@ collection:
         meta:
           id: req_e27cda13d1e94b2191883d8ad5facd8b
           created: 1790264375747
-          modified: 1790264878255
+          modified: 1790955150113
           isPrivate: false
           description: |-
             GET /api/v2/donors/funds
@@ -32,14 +32,16 @@ collection:
         method: GET
         parameters:
           - name: businessPartnerIds
-            value: "600000"
+            value: "{{ _.bpIds4 }}"
             disabled: false
           - name: businessPartnerIds
             value: "600001"
             disabled: true
           - name: consolidate
             value: "true"
-            disabled: true
+            disabled: false
+            type: text
+            multiline: false
           - name: search
             value: climate
             disabled: true
@@ -86,7 +88,7 @@ collection:
         meta:
           id: req_940ef3dd92c940d687b70c7d613a3eb0
           created: 1790264375748
-          modified: 1790264883410
+          modified: 1790955856249
           isPrivate: false
           description: >-
             GET /api/v2/donors/funds/summary
@@ -104,14 +106,11 @@ collection:
         method: GET
         parameters:
           - name: businessPartnerIds
-            value: "600000"
+            value: "{{ _.BussinesParnetIds }}"
             disabled: false
-          - name: businessPartnerIds
-            value: "600001"
-            disabled: true
           - name: consolidate
             value: "true"
-            disabled: true
+            disabled: false
           - name: fundCode
             value: "{{ _.fundCode }}"
             disabled: true
@@ -131,7 +130,7 @@ collection:
         meta:
           id: req_84b1cb8284884ab3a8dd5d56a40731d3
           created: 1790264375749
-          modified: 1790264952886
+          modified: 1790964155948
           isPrivate: false
           description: >-
             GET /api/v2/donors/project-specific-grants
@@ -148,14 +147,14 @@ collection:
         method: GET
         parameters:
           - name: businessPartnerIds
-            value: "600128"
+            value: "{{ _.PSG_2BpIds }}"
             disabled: false
           - name: businessPartnerIds
             value: "600001"
             disabled: true
           - name: consolidate
             value: "true"
-            disabled: true
+            disabled: false
           - name: search
             value: water
             disabled: true
@@ -196,7 +195,7 @@ collection:
         meta:
           id: req_c36978f8405849d1b99858aba40c44c8
           created: 1790264375749
-          modified: 1790264956981
+          modified: 1790961002166
           isPrivate: false
           description: >-
             GET /api/v2/donors/fund-projects-summary
@@ -216,20 +215,20 @@ collection:
         method: GET
         parameters:
           - name: businessPartnerIds
-            value: "600000"
+            value: "{{ _.BussinesParnetIds }}"
             disabled: false
           - name: businessPartnerIds
             value: "600001"
             disabled: true
           - name: fundCodes
-            value: "{{ _.fundCode }}"
+            value: "{{ _.tfFundCode1 }}"
             disabled: false
           - name: fundCodes
             value: ""
             disabled: true
           - name: consolidate
             value: "true"
-            disabled: true
+            disabled: false
         headers:
           - name: Accept
             value: application/json
@@ -415,7 +414,7 @@ collection:
         meta:
           id: req_65fd8867557243b2adc60c70bebd46aa
           created: 1790264375753
-          modified: 1790264375753
+          modified: 1790867955343
           isPrivate: false
           description: >-
             GET /api/v2/donors/projects/by-country
@@ -433,21 +432,17 @@ collection:
         method: GET
         parameters:
           - name: businessPartnerIds
-            value: "600000"
+            value: ""
             disabled: false
           - name: businessPartnerIds
             value: "600001"
             disabled: true
           - name: consolidate
-            value: "true"
-            disabled: true
+            value: "false"
+            disabled: false
         headers:
           - name: Accept
             value: application/json
-        authentication:
-          type: bearer
-          token: "{{ _.token }}"
-          prefix: Bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -469,11 +464,11 @@ cookieJar:
   meta:
     id: jar_01bfca5059508a4c47116ec58cab7abb9cd89d5a
     created: 1790264384839
-    modified: 1790264862989
+    modified: 1790962887069
   cookies:
     - id: d6a87122-7e7d-4658-b3ea-24d711e21513
       key: fpc
-      value: Ajd8I4PeKrRLq7yNxSsmQuxvvbMfAQAAAB09R-IOAAAA
+      value: Ajd8I4PeKrRLq7yNxSsmQuxvvbMfAQAAAMbjUeIOAAAA
       domain: login.microsoftonline.com
       path: /
       secure: true

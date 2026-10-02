@@ -1,4 +1,4 @@
-type: collection.insomnia.rest/5.0
+type: spec.insomnia.rest/5.0
 schema_version: "5.1"
 name: Donor Funds API v1
 meta:
@@ -15,12 +15,12 @@ collection:
       sortKey: -1000
       description: Endpoints por donorId. Scope DonorFundScope / role DonorFundRole.
     children:
-      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/funds"
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.bpId }}/funds"
         name: GET Funds
         meta:
           id: req_55951e08cccb40ecb648173175736363
           created: 1790264375777
-          modified: 1790264375777
+          modified: 1790952893032
           isPrivate: false
           description: >-
             GET /api/v1/donors/{donorId}/funds
@@ -46,8 +46,8 @@ collection:
             value: climate
             disabled: true
           - name: expand
-            value: sectors
-            disabled: true
+            value: fundTotals
+            disabled: false
           - name: expand
             value: fundTotals
             disabled: true
@@ -75,10 +75,6 @@ collection:
         headers:
           - name: Accept
             value: application/json
-        authentication:
-          type: bearer
-          token: "{{ _.token }}"
-          prefix: Bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -87,12 +83,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/funds/summary"
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.bpId2 }}/funds/summary"
         name: GET Funds Summary
         meta:
           id: req_6f0a3e227cce41069125d073b5cd4ec5
           created: 1790264375777
-          modified: 1790264375777
+          modified: 1790954665912
           isPrivate: false
           description: |-
             GET /api/v1/donors/{donorId}/funds/summary
@@ -109,10 +105,6 @@ collection:
         headers:
           - name: Accept
             value: application/json
-        authentication:
-          type: bearer
-          token: "{{ _.token }}"
-          prefix: Bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -121,12 +113,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/fund-projects-summary"
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.bpId2 }}/fund-projects-summary"
         name: GET Fund Projects Summary
         meta:
           id: req_1c16c9b3fed34916a4fa7343fd18e809
           created: 1790264375778
-          modified: 1790264375778
+          modified: 1790960989741
           isPrivate: false
           description: >-
             GET /api/v1/donors/{donorId}/fund-projects-summary
@@ -143,7 +135,7 @@ collection:
         method: GET
         parameters:
           - name: fundCodes
-            value: "{{ _.fundCode }}"
+            value: "{{ _.tfFundCode1 }}"
             disabled: false
           - name: fundCodes
             value: ""
@@ -151,10 +143,6 @@ collection:
         headers:
           - name: Accept
             value: application/json
-        authentication:
-          type: bearer
-          token: "{{ _.token }}"
-          prefix: Bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -201,12 +189,13 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.donorId }}/project-specific-grants"
+      - url: "{{ _.baseUrl }}/api/v1/donors/{{ _.psgDetailDonorId
+          }}/project-specific-grants"
         name: GET Project-Specific Grants
         meta:
           id: req_3ab12b4f3deb4fddb27af4db67f4a603
           created: 1790264375779
-          modified: 1790264375779
+          modified: 1790964273921
           isPrivate: false
           description: >-
             GET /api/v1/donors/{donorId}/project-specific-grants
@@ -250,10 +239,6 @@ collection:
         headers:
           - name: Accept
             value: application/json
-        authentication:
-          type: bearer
-          token: "{{ _.token }}"
-          prefix: Bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -431,7 +416,7 @@ collection:
         meta:
           id: req_457aa9c1f9af4d9a91fe52e286d21e54
           created: 1790264375782
-          modified: 1790264375782
+          modified: 1790342916147
           isPrivate: false
           description: >-
             GET /api/v1/donors/{donorId}/projects/by-sector
@@ -444,10 +429,6 @@ collection:
         headers:
           - name: Accept
             value: application/json
-        authentication:
-          type: bearer
-          token: "{{ _.token }}"
-          prefix: Bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -461,7 +442,7 @@ collection:
         meta:
           id: req_f8ebd537172148daabee4711c5cb4a19
           created: 1790264375782
-          modified: 1790264375782
+          modified: 1790342951978
           isPrivate: false
           description: |-
             GET /api/v1/donors/{donorId}/projects/approval-history
@@ -474,10 +455,10 @@ collection:
         parameters:
           - name: sortBy
             value: approvalYear
-            disabled: true
+            disabled: false
           - name: order
-            value: desc
-            disabled: true
+            value: ASC
+            disabled: false
           - name: page
             value: "1"
             disabled: true
@@ -487,10 +468,6 @@ collection:
         headers:
           - name: Accept
             value: application/json
-        authentication:
-          type: bearer
-          token: "{{ _.token }}"
-          prefix: Bearer
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -700,16 +677,770 @@ collection:
       clientId: "{{ _.clientId }}"
       clientSecret: "{{ _.clientSecret }}"
       scope: "{{ _.scope }}"
+  - name: Donors
+    meta:
+      id: fld_4fda0b7956fe4f9fa6598503d06c7561
+      created: 1790695933453
+      modified: 1790695933453
+      sortKey: -1790695933453
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/api/v2/donors/funds"
+        name: Retrieves a list of funds for the specified business partner ids and
+          filters.
+        meta:
+          id: req_2e68e6d0f1e844139cc66585fd295d14
+          created: 1790695933454
+          modified: 1790695933454
+          isPrivate: false
+          description: "## Examples\r
+
+            \            \r
+
+            ### Basic request:\r
+
+            The following example will retrieve the first 10 Funds for Business
+            Partner Ids `600000` and `600001` (default pagination settings):\r
+
+            ```html\r
+
+            GET /api/v1/donors/funds?businessPartnerIds=[600000,600001]\r
+
+            ```\r
+
+            - **Note:** Default pagination values: `page=1`, `pageSize=10`\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            The following example will retrieve the first 10 Funds for Business
+            Partner Ids `600000` and `600001` and will consolidate the results
+            by Fund Code:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds?businessPartnerIds=[600000,600001]&consolidate\
+            =true\r
+
+            ```\r
+
+            \            \r
+
+            ### Paginated request:\r
+
+            The following example will retrieve 10 Funds for Business Partner
+            Ids `600000` and `600001` and will include pagination:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds?businessPartnerIds=[600000,600001]&page=3&page\
+            Size=5\r
+
+            ```\r
+
+            - **Note:** It is not mandatory to include both pagination
+            properties.\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          sortKey: -1790695933454
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: string
+            disabled: false
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: search
+            value: string
+            disabled: true
+          - name: expand
+            value: string
+            disabled: true
+          - name: fromCreationDate
+            value: string
+            disabled: true
+          - name: toCreationDate
+            value: string
+            disabled: true
+          - name: status
+            value: string
+            disabled: true
+          - name: page
+            value: "0"
+            disabled: true
+          - name: pageSize
+            value: "0"
+            disabled: true
+          - name: sortBy
+            value: string
+            disabled: true
+          - name: order
+            value: string
+            disabled: true
+        authentication:
+          type: bearer
+          token: "{{ _.bearerToken }}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/v2/donors/funds/summary"
+        name: Retrieves a summary of funds for the specified business partner ids and
+          filters.
+        meta:
+          id: req_2ab88afc512f4722a29b8e9f96a58ec2
+          created: 1790695933455
+          modified: 1790695933455
+          isPrivate: false
+          description: "## Examples\r
+
+            \            \r
+
+            ### Basic request:\r
+
+            The following example will retrieve a summary of Funds for Business
+            Partner Ids `600000` and `600001`,\r
+
+            with one item in `data` per Business Partner Id:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds/summary?businessPartnerIds=[600000,600001]\r
+
+            ```\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            The following example will retrieve a summary of Funds for Business
+            Partner Ids `600000` and `600001`\r
+
+            consolidated by Fund Code into a single `data` item, without
+            double-counting funds shared between them:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds/summary?businessPartnerIds=[600000,600001]&con\
+            solidate=true\r
+
+            ```\r
+
+            \            \r
+
+            ### Request by FundCode:\r
+
+            The following example will retrieve a summary of Funds for Business
+            Partner Ids `600000` and `600001` and will specify the Fund Code
+            `ABC`:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds/summary?businessPartnerIds=[600000,600001]&fun\
+            dCode=ABC\r
+
+            ```\r
+
+            - **Note:** Any Business Partner Id without funds matching the
+            applied filters is returned in `notFound`.\r
+
+            A 404 response is returned only when none of the requested Business
+            Partner Ids have matching funds.\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          sortKey: -1790695933455
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: string
+            disabled: false
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: fundCode
+            value: string
+            disabled: true
+        authentication:
+          type: bearer
+          token: "{{ _.bearerToken }}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/v2/donors/fund-projects-summary"
+        name: Retrieves a summary of fund projects for the specified business partner
+          ids and filters.
+        meta:
+          id: req_78f8cdf9bfc745a685ab3d33ce3a7b2f
+          created: 1790695933456
+          modified: 1790695933456
+          isPrivate: false
+          description: "## Examples\r
+
+            \r
+
+            ### Basic request:\r
+
+            The following example will retrieve a summary of Fund Projects for
+            `businessPartnerIds=[600000,600001]` and `fundCodes=ABC`:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/fund-projects-summary?businessPartnerIds=[600000,600\
+            001]&fundCodes=ABC\r
+
+            ```\r
+
+            - **Note:** Default pagination values: `page=1`, `pageSize=10`\r
+
+            \r
+
+            ### Consolidated request:\r
+
+            The following example will retrieve a summary of Fund Projects for
+            `businessPartnerIds=[600000,600001]`, `fundCodes=ABC` and will
+            consolidate the results by Fund Project Code:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/fund-projects-summary?businessPartnerIds=[600000,600\
+            001]&fundCodes=ABC&consolidate=true\r
+
+            ```\r
+
+            \r
+
+            ## Permissions\r
+
+            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          sortKey: -1790695933456
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "0"
+            disabled: false
+          - name: fundCodes
+            value: string
+            disabled: false
+          - name: consolidate
+            value: "true"
+            disabled: true
+        authentication:
+          type: bearer
+          token: "{{ _.bearerToken }}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/v2/donors/project-specific-grants"
+        name: Retrieves a list of project-specific grants for the specified business
+          partner ids and filters.
+        meta:
+          id: req_2af3829252cb4ca5ad8658fc9ae321bc
+          created: 1790695933457
+          modified: 1790695933457
+          isPrivate: false
+          description: "## Examples\r
+
+            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants?businessPartnerIds=[600000,6\
+            00001]\r
+
+            ```\r
+
+            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants?businessPartnerIds=[600000,6\
+            00001]&consolidate=true\r
+
+            ```\r
+
+            \r
+
+            ### Request with pagination:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants?businessPartnerIds=[600000,6\
+            00001]&page=1&pageSize=10\r
+
+            ```\r
+
+            \r
+
+            ## Permissions\r
+
+            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          sortKey: -1790695933457
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "0"
+            disabled: false
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: search
+            value: string
+            disabled: true
+          - name: fromApprovalDate
+            value: string
+            disabled: true
+          - name: toApprovalDate
+            value: string
+            disabled: true
+          - name: status
+            value: string
+            disabled: true
+          - name: page
+            value: "0"
+            disabled: true
+          - name: pageSize
+            value: "0"
+            disabled: true
+          - name: sortBy
+            value: string
+            disabled: true
+          - name: order
+            value: string
+            disabled: true
+        authentication:
+          type: bearer
+          token: "{{ _.bearerToken }}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/v2/donors/project-specific-grants/summary"
+        name: Retrieves a summary of project-specific grants for the specified business
+          partner ids and filters.
+        meta:
+          id: req_678c3028d3cc4e61b7239714ce6c9085
+          created: 1790695933457
+          modified: 1790695933457
+          isPrivate: false
+          description: "## Examples\r
+
+            \            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/summary?businessPartnerIds=[\
+            600000,600001]\r
+
+            ```\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/summary?businessPartnerIds=[\
+            600000,600001]&consolidate=true\r
+
+            ```\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          sortKey: -1790695933457
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "0"
+            disabled: false
+          - name: consolidate
+            value: "true"
+            disabled: true
+        authentication:
+          type: bearer
+          token: "{{ _.bearerToken }}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/v2/donors/project-specific-grants/by-sector"
+        name: Retrieves a list of project-specific grants summary by sector, for the
+          specified business partner ids and filters.
+        meta:
+          id: req_4b31c7224431451fad34038f491f57f7
+          created: 1790695933458
+          modified: 1790695933458
+          isPrivate: false
+          description: "## Examples\r
+
+            \            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/by-sector?businessPartnerIds\
+            =[600000,600001]\r
+
+            ```\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/by-sector?businessPartnerIds\
+            =[600000,600001]&consolidated=true\r
+
+            ```\r
+
+            \            \r
+
+            ### Request with pagination:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/by-sector?businessPartnerIds\
+            =[600000,600001]&page=1&pageSize=10\r
+
+            ```\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          sortKey: -1790695933458
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "0"
+            disabled: false
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: page
+            value: "0"
+            disabled: true
+          - name: pageSize
+            value: "0"
+            disabled: true
+          - name: sortBy
+            value: string
+            disabled: true
+          - name: order
+            value: string
+            disabled: true
+        authentication:
+          type: bearer
+          token: "{{ _.bearerToken }}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/v2/donors/projects/by-country"
+        name: Retrieves a list of projects by country for the specified business partner
+          ids and filters.
+        meta:
+          id: req_06afc4d545bd4765a33af7ac1e30ff96
+          created: 1790695933459
+          modified: 1790695933459
+          isPrivate: false
+          description: "## Examples\r
+
+            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/projects/by-country?businessPartnerIds=[600000,60000\
+            1]\r
+
+            ```º\r
+
+            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/projects/by-country?businessPartnerIds=[600000,60000\
+            1]&consolidated=true\r
+
+            ```\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          sortKey: -1790695933459
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "0"
+            disabled: false
+          - name: consolidate
+            value: "true"
+            disabled: true
+        authentication:
+          type: bearer
+          token: "{{ _.bearerToken }}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/api/v2/donors/project-specific-grants/in-execution"
+        name: Retrieves a list of project-specific grants in execution for the specified
+          business partner ids and filters.
+        meta:
+          id: req_411b60a3857847f08b9804a235188b3a
+          created: 1790695933459
+          modified: 1790695933459
+          isPrivate: false
+          description: "## Examples\r
+
+            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/in-execution?businessPartner\
+            Ids=[600000,600001]\r
+
+            ```\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/in-execution?businessPartner\
+            Ids=[600000,600001]&consolidated=true\r
+
+            ```\r
+
+            \            \r
+
+            ### Request with pagination:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/in-execution?businessPartner\
+            Ids=[600000,600001]&page=1&pageSize=10\r
+
+            ```\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          sortKey: -1790695933459
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: string
+            disabled: false
+          - name: consolidate
+            value: "true"
+            disabled: true
+          - name: search
+            value: string
+            disabled: true
+          - name: page
+            value: "0"
+            disabled: true
+          - name: pageSize
+            value: "0"
+            disabled: true
+          - name: sortBy
+            value: string
+            disabled: true
+          - name: order
+            value: string
+            disabled: true
+        authentication:
+          type: bearer
+          token: "{{ _.bearerToken }}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
 cookieJar:
   name: Default Jar
   meta:
     id: jar_82c4afa4fa297b53240f89733682bd2b8d352fd1
     created: 1790265022003
-    modified: 1790265851602
+    modified: 1790964275144
   cookies:
     - id: 1b8d9a6a-fb27-432e-b234-2cd746e6d65f
       key: fpc
-      value: AjvkIOrSY4BDtI7LAJJqULVvvbMfAQAAAFhAR-IOAAAAgQVrRgEAAACsQEfiDgAAAA
+      value: AjvkIOrSY4BDtI7LAJJqULVvvbMfAQAAADLpUeIOAAAA
       domain: login.microsoftonline.com
       path: /
       secure: true
@@ -736,12 +1467,14 @@ environments:
   meta:
     id: env_5073add3537748858005d716e675212f
     created: 1790264375768
-    modified: 1790265809238
+    modified: 1790954966477
     isPrivate: false
   data:
     token: ""
     bpId: "600108"
+    bpId2: "600135"
     bpIds: "[600135,600108]"
+    bpIds4: "[600175, 601350, 601420, 601341]"
     consolidate: "true"
     fundCode: MFR
     fundCodes: KIF
@@ -757,5 +1490,1578 @@ environments:
     sortByPsg: projectName
     sortByPsgBySector: projectCount
     sortByPsgInExecution: projectName
-    donorId: "600135"
+    donorId: "600069"
     operationNumber: ""
+    base_url: "{{ _.scheme }}://{{ _.host }}{{ _.base_path }}"
+  subEnvironments:
+    - name: OpenAPI env api-np-d-app-service-fundscsdf.azurewebsites.net
+      meta:
+        id: env_d5df7afd682b4d49a14737fcee115d0d
+        created: 1790695933452
+        modified: 1790695933452
+        isPrivate: false
+        sortKey: 1790695933452
+      data:
+        scheme: https
+        base_path: ""
+        host: api-np-d-app-service-fundscsdf.azurewebsites.net
+        bearerToken: bearerToken
+spec:
+  contents:
+    openapi: 3.0.4
+    info:
+      title: Resource Mobilization Business Donor Funds API
+      description: Resource Mobilization Business API for providing access to Donor
+        Funds data.
+      version: "2.0"
+    servers:
+      - url: https://api-np-d-app-service-fundscsdf.azurewebsites.net
+    paths:
+      /api/v2/donors/funds:
+        get:
+          tags:
+            - Donors
+          summary: Retrieves a list of funds for the specified business partner ids and
+            filters.
+          description: "## Examples\r
+
+            \            \r
+
+            ### Basic request:\r
+
+            The following example will retrieve the first 10 Funds for Business
+            Partner Ids `600000` and `600001` (default pagination settings):\r
+
+            ```html\r
+
+            GET /api/v1/donors/funds?businessPartnerIds=[600000,600001]\r
+
+            ```\r
+
+            - **Note:** Default pagination values: `page=1`, `pageSize=10`\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            The following example will retrieve the first 10 Funds for Business
+            Partner Ids `600000` and `600001` and will consolidate the results
+            by Fund Code:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds?businessPartnerIds=[600000,600001]&consolidate\
+            =true\r
+
+            ```\r
+
+            \            \r
+
+            ### Paginated request:\r
+
+            The following example will retrieve 10 Funds for Business Partner
+            Ids `600000` and `600001` and will include pagination:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds?businessPartnerIds=[600000,600001]&page=3&page\
+            Size=5\r
+
+            ```\r
+
+            - **Note:** It is not mandatory to include both pagination
+            properties.\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          parameters:
+            - name: businessPartnerIds
+              in: query
+              description: One or multiple Business Partner IDs. Maximum `25`. Duplicate IDs
+                are ignored.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: string
+            - name: consolidate
+              in: query
+              description: Default `false`. If `false`, Funds are returned independently per
+                BP. If `true`, shared Funds are consolidated.
+              schema:
+                type: boolean
+            - name: search
+              in: query
+              description: When supplied, will get Funds whose name or code contains the
+                specified text (case-insensitive)
+              schema:
+                type: string
+            - name: expand
+              in: query
+              description: "When supplied, will include the specified related entities in the
+                response\r
+
+                (case-insensitive; values: `sectors`, `fundTotals`)"
+              schema:
+                type: array
+                items:
+                  type: string
+            - name: fromCreationDate
+              in: query
+              description: "When supplied, will get Funds that were created on or after the
+                specified date\r
+
+                (formats: `M/d/yyyy`, `yyyy-MM-dd`)"
+              schema:
+                type: string
+                format: date
+            - name: toCreationDate
+              in: query
+              description: "When supplied, will get Funds that were created on or before the
+                specified date\r
+
+                (formats: `M/d/yyyy`, `yyyy-MM-dd`)"
+              schema:
+                type: string
+                format: date
+            - name: status
+              in: query
+              description: "When supplied, will get Funds that are in the specified status\r
+
+                (case-insensitive; values: `active`, `terminate`, `expired`)"
+              schema:
+                type: string
+            - name: page
+              in: query
+              description: "Page number (default: `1`)"
+              schema:
+                type: integer
+                format: int32
+            - name: pageSize
+              in: query
+              description: "Page size (default: `10`, max: `50`)"
+              schema:
+                type: integer
+                format: int32
+            - name: sortBy
+              in: query
+              description: "Specifies the field by which the results will be sorted
+                (case-insensitive, default: `fundName`)\r
+
+                \r
+
+                Valid values: `fundName`, `fundCode`, `fundType`,
+                `creationDate`, `closedDate`, `fundCurrency`, `status`"
+              schema:
+                type: string
+            - name: order
+              in: query
+              description: "Specifies the sorting order (values: `asc`, `desc`, default:
+                `asc`)"
+              schema:
+                type: string
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/PaginatedResponseOfGetFundsByIdsResponseItem"
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+      /api/v2/donors/funds/summary:
+        get:
+          tags:
+            - Donors
+          summary: Retrieves a summary of funds for the specified business partner ids and
+            filters.
+          description: "## Examples\r
+
+            \            \r
+
+            ### Basic request:\r
+
+            The following example will retrieve a summary of Funds for Business
+            Partner Ids `600000` and `600001`,\r
+
+            with one item in `data` per Business Partner Id:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds/summary?businessPartnerIds=[600000,600001]\r
+
+            ```\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            The following example will retrieve a summary of Funds for Business
+            Partner Ids `600000` and `600001`\r
+
+            consolidated by Fund Code into a single `data` item, without
+            double-counting funds shared between them:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds/summary?businessPartnerIds=[600000,600001]&con\
+            solidate=true\r
+
+            ```\r
+
+            \            \r
+
+            ### Request by FundCode:\r
+
+            The following example will retrieve a summary of Funds for Business
+            Partner Ids `600000` and `600001` and will specify the Fund Code
+            `ABC`:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/funds/summary?businessPartnerIds=[600000,600001]&fun\
+            dCode=ABC\r
+
+            ```\r
+
+            - **Note:** Any Business Partner Id without funds matching the
+            applied filters is returned in `notFound`.\r
+
+            A 404 response is returned only when none of the requested Business
+            Partner Ids have matching funds.\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          parameters:
+            - name: businessPartnerIds
+              in: query
+              description: One or multiple Business Partner IDs. Maximum `25`. Duplicate IDs
+                are ignored.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: string
+            - name: consolidate
+              in: query
+              description: "When supplied, will consolidate the response by Funds or not
+                (case-insensitive; values: `true`, `false`)"
+              schema:
+                type: boolean
+            - name: fundCode
+              in: query
+              description: Optional filter to retrieve funds summary by Fund Code.
+              schema:
+                type: string
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                      onors.V2.GetFundsSummaryByIds.GetFundsSummaryByIdsRespons\
+                      e"
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+      /api/v2/donors/fund-projects-summary:
+        get:
+          tags:
+            - Donors
+          summary: Retrieves a summary of fund projects for the specified business partner
+            ids and filters.
+          description: "## Examples\r
+
+            \r
+
+            ### Basic request:\r
+
+            The following example will retrieve a summary of Fund Projects for
+            `businessPartnerIds=[600000,600001]` and `fundCodes=ABC`:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/fund-projects-summary?businessPartnerIds=[600000,600\
+            001]&fundCodes=ABC\r
+
+            ```\r
+
+            - **Note:** Default pagination values: `page=1`, `pageSize=10`\r
+
+            \r
+
+            ### Consolidated request:\r
+
+            The following example will retrieve a summary of Fund Projects for
+            `businessPartnerIds=[600000,600001]`, `fundCodes=ABC` and will
+            consolidate the results by Fund Project Code:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/fund-projects-summary?businessPartnerIds=[600000,600\
+            001]&fundCodes=ABC&consolidate=true\r
+
+            ```\r
+
+            \r
+
+            ## Permissions\r
+
+            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          parameters:
+            - name: businessPartnerIds
+              in: query
+              description: One or multiple Business Partner IDs. Maximum `25`. Duplicate IDs
+                are ignored.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+            - name: fundCodes
+              in: query
+              description: One or multiple Fund Codes used to calculate the summary.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: string
+            - name: consolidate
+              in: query
+              description: Default `false`. If `false`, returns one summary per BP. If `true`,
+                returns one consolidated summary.
+              schema:
+                type: boolean
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                      onors.V2.GetFundProjectsSummaryByIds.GetFundProjectsSumma\
+                      ryByIdsResponse"
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+      /api/v2/donors/project-specific-grants:
+        get:
+          tags:
+            - Donors
+          summary: Retrieves a list of project-specific grants for the specified business
+            partner ids and filters.
+          description: "## Examples\r
+
+            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants?businessPartnerIds=[600000,6\
+            00001]\r
+
+            ```\r
+
+            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants?businessPartnerIds=[600000,6\
+            00001]&consolidate=true\r
+
+            ```\r
+
+            \r
+
+            ### Request with pagination:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants?businessPartnerIds=[600000,6\
+            00001]&page=1&pageSize=10\r
+
+            ```\r
+
+            \r
+
+            ## Permissions\r
+
+            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          parameters:
+            - name: businessPartnerIds
+              in: query
+              description: One or multiple Business Partner IDs. Maximum `25`. Duplicate IDs
+                are ignored.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+            - name: consolidate
+              in: query
+              description: Default `false`. Determines whether PSGs are returned per BP or
+                consolidated.
+              schema:
+                type: boolean
+            - name: search
+              in: query
+              description: When specified, will filter the results to those that match the
+                search term in any of the relevant fields.
+              schema:
+                type: string
+            - name: fromApprovalDate
+              in: query
+              description: When specified, will filter the results to those with an approval
+                date greater than or equal to the specified date.
+              schema:
+                type: string
+                format: date
+            - name: toApprovalDate
+              in: query
+              description: When specified, will filter the results to those with an approval
+                date less than or equal to the specified date.
+              schema:
+                type: string
+                format: date
+            - name: status
+              in: query
+              description: "When specified, will filter the results to those with the
+                specified status\r
+
+                (case-insensitive; values: `preparation`, `approved`,
+                `eligibility`, `disbursing`, `closed`)"
+              schema:
+                type: string
+            - name: page
+              in: query
+              description: "Specifies the page number (default: `1`)"
+              schema:
+                type: integer
+                format: int32
+            - name: pageSize
+              in: query
+              description: "Specifies the page size (default: `10`, max: `50`)"
+              schema:
+                type: integer
+                format: int32
+            - name: sortBy
+              in: query
+              description: "Specifies the field by which the results will be sorted
+                (case-insensitive, default: `projectName`)\r
+
+                \r
+
+                Valid values: `projectName`, `projectNumber`, `status`,
+                `approvalDate`"
+              schema:
+                type: string
+            - name: order
+              in: query
+              description: "Specifies the order direction\r
+
+                (values: `asc`, `desc`)"
+              schema:
+                type: string
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                      onors.V2.GetProjectSpecificGrantsByIds.GetProjectSpecific\
+                      GrantsByIdsResponse"
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+      /api/v2/donors/project-specific-grants/summary:
+        get:
+          tags:
+            - Donors
+          summary: Retrieves a summary of project-specific grants for the specified
+            business partner ids and filters.
+          description: "## Examples\r
+
+            \            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/summary?businessPartnerIds=[\
+            600000,600001]\r
+
+            ```\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/summary?businessPartnerIds=[\
+            600000,600001]&consolidate=true\r
+
+            ```\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          parameters:
+            - name: businessPartnerIds
+              in: query
+              description: One or multiple Business Partner IDs. Maximum `25`. Duplicate IDs
+                are ignored.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+            - name: consolidate
+              in: query
+              description: Default `false`. Determines whether PSGs are returned per BP or
+                consolidated.
+              schema:
+                type: boolean
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                      onors.V2.GetProjectSpecificGrantsSummaryByIds.GetProjectS\
+                      pecificGrantsSummaryByIdsResponse"
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+      /api/v2/donors/project-specific-grants/by-sector:
+        get:
+          tags:
+            - Donors
+          summary: Retrieves a list of project-specific grants summary by sector, for the
+            specified business partner ids and filters.
+          description: "## Examples\r
+
+            \            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/by-sector?businessPartnerIds\
+            =[600000,600001]\r
+
+            ```\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/by-sector?businessPartnerIds\
+            =[600000,600001]&consolidated=true\r
+
+            ```\r
+
+            \            \r
+
+            ### Request with pagination:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/by-sector?businessPartnerIds\
+            =[600000,600001]&page=1&pageSize=10\r
+
+            ```\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          parameters:
+            - name: businessPartnerIds
+              in: query
+              description: One or multiple Business Partner IDs. Maximum `25`. Duplicate IDs
+                are ignored.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+            - name: consolidate
+              in: query
+              description: Default `false`. Determines whether PSGs are returned per BP or
+                consolidated.
+              schema:
+                type: boolean
+            - name: page
+              in: query
+              description: "Specifies the page number (default: `1`). Paginates over the
+                resulting groups\r
+
+                (one group per business partner, or a single group when
+                `consolidate=true`), not\r
+
+                over the sectors within a group."
+              schema:
+                type: integer
+                format: int32
+            - name: pageSize
+              in: query
+              description: "Specifies the page size (default: `10`, max: `50`)"
+              schema:
+                type: integer
+                format: int32
+            - name: sortBy
+              in: query
+              description: "Specifies the field by which each group's `sectors` are sorted
+                (case-insensitive,\r
+
+                default: `projectCount`)\r
+
+                \r
+
+                Valid values: `sectorName`, `projectCount`, `percentage`"
+              schema:
+                type: string
+            - name: order
+              in: query
+              description: "Specifies the order direction\r
+
+                (values: `asc`, `desc`, default: `desc`)"
+              schema:
+                type: string
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                      onors.V2.GetProjectSpecificGrantsBySectorByIds.GetProject\
+                      SpecificGrantsBySectorByIdsResponse"
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+      /api/v2/donors/project-specific-grants/in-execution:
+        get:
+          tags:
+            - Donors
+          summary: Retrieves a list of project-specific grants in execution for the
+            specified business partner ids and filters.
+          description: "## Examples\r
+
+            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/in-execution?businessPartner\
+            Ids=[600000,600001]\r
+
+            ```\r
+
+            \            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/in-execution?businessPartner\
+            Ids=[600000,600001]&consolidated=true\r
+
+            ```\r
+
+            \            \r
+
+            ### Request with pagination:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/project-specific-grants/in-execution?businessPartner\
+            Ids=[600000,600001]&page=1&pageSize=10\r
+
+            ```\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          parameters:
+            - name: businessPartnerIds
+              in: query
+              description: One or multiple Business Partner IDs. Maximum `25`. Duplicate IDs
+                are ignored.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: string
+            - name: consolidate
+              in: query
+              description: "When supplied, will consolidate the response by Funds or not
+                (case-insensitive; values: `true`, `false`)"
+              schema:
+                type: boolean
+            - name: search
+              in: query
+              description: When specified, will filter the results to those that match the
+                search term in any of the relevant fields.
+              schema:
+                type: string
+            - name: page
+              in: query
+              description: "Specifies the page number (default: `1`)"
+              schema:
+                type: integer
+                format: int32
+            - name: pageSize
+              in: query
+              description: "Specifies the page size (default: `10`, max: `50`)"
+              schema:
+                type: integer
+                format: int32
+            - name: sortBy
+              in: query
+              description: "Specifies the field by which the results will be sorted
+                (case-insensitive, default: `projectName`)\r
+
+                \r
+
+                Valid values: `projectName`, `projectNumber`, `status`,
+                `approvalDate`"
+              schema:
+                type: string
+            - name: order
+              in: query
+              description: "Specifies the order direction\r
+
+                (values: `asc`, `desc`)"
+              schema:
+                type: string
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                      onors.V1.PSG.GetPSGInExecution.GetProjectSpecificGrantsIn\
+                      ExecutionResponse"
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+      /api/v2/donors/projects/by-country:
+        get:
+          tags:
+            - Donors
+          summary: Retrieves a list of projects by country for the specified business
+            partner ids and filters.
+          description: "## Examples\r
+
+            \r
+
+            ### Basic request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/projects/by-country?businessPartnerIds=[600000,60000\
+            1]\r
+
+            ```º\r
+
+            \r
+
+            ### Consolidated request:\r
+
+            ```html\r
+
+            GET
+            /api/v1/donors/projects/by-country?businessPartnerIds=[600000,60000\
+            1]&consolidated=true\r
+
+            ```\r
+
+            \            \r
+
+            ## Permissions\r
+
+            \            \r
+
+            Delegates:\r
+
+            - `DonorFundScope`\r
+
+            \            \r
+
+            App Roles:\r
+
+            - `DonorFundRole`"
+          parameters:
+            - name: businessPartnerIds
+              in: query
+              description: One or multiple Business Partner IDs. Maximum `25`. Duplicate IDs
+                are ignored.
+              required: true
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+            - name: consolidate
+              in: query
+              description: Default `false`. Determines whether PSGs are returned per BP or
+                consolidated.
+              schema:
+                type: boolean
+          responses:
+            "200":
+              description: OK
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                      onors.V2.GetProjectsByCountryByIds.GetProjectsByCountryBy\
+                      IdsResponse"
+            "400":
+              description: Bad Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ValidationProblemDetails"
+            "404":
+              description: Not Found
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+    components:
+      schemas:
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V1.GetFundProjectsSummary.Dtos.BusinessPartnerSummary:
+          type: object
+          properties:
+            myPledged:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            myContributions:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V1.PSG.GetPSGInExecution.GetProjectSpecificGrantsInExecutionResponse:
+          required:
+            - donorId
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V1.PSG.GetPSGInExecution.ProjectSpecificGrantInExecutio\
+                  n"
+              nullable: true
+            page:
+              type: integer
+              format: int32
+            pageSize:
+              type: integer
+              format: int32
+            totalItems:
+              type: integer
+              format: int32
+            totalPages:
+              type: integer
+              format: int32
+              readOnly: true
+            donorId:
+              type: integer
+              format: int32
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V1.PSG.GetPSGInExecution.ProjectSpecificGrantInExecution:
+          type: object
+          properties:
+            projectNumber:
+              type: string
+              nullable: true
+            projectName:
+              type: string
+              nullable: true
+            approved:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            disbursed:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            pledged:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            available:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetFundProjectsSummaryByIds.FundProjectSummaryDto:
+          required:
+            - businessPartnerSummary
+          type: object
+          properties:
+            businessPartnerIds:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+            fundCodes:
+              type: array
+              items:
+                type: string
+              nullable: true
+            totalFundContributions:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            totalCurrentApproved:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            totalDisbursed:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            businessPartnerSummary:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                onors.V1.GetFundProjectsSummary.Dtos.BusinessPartnerSummary"
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetFundProjectsSummaryByIds.GetFundProjectsSummaryByIdsResponse:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetFundProjectsSummaryByIds.FundProjectSummaryDto"
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetFundsByIds.GetFundsByIdsResponseItem:
+          required:
+            - closedDate
+            - fundCurrency
+            - status
+          type: object
+          properties:
+            businessPartnerIds:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+            fundName:
+              type: string
+              nullable: true
+            fundCode:
+              type: string
+              nullable: true
+            fundType:
+              type: string
+              nullable: true
+            sectors:
+              type: array
+              items:
+                type: string
+              nullable: true
+            creationDate:
+              type: string
+              format: date
+            closedDate:
+              type: string
+              format: date
+              nullable: true
+            pledgedAmount:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            resourcesContributed:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            totalFundContribution:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            totalFundAllocated:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            fundCurrency:
+              type: string
+              nullable: true
+            status:
+              type: string
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetFundsSummaryByIds.FundSummaryDto:
+          type: object
+          properties:
+            businessPartnerIds:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+            myTotalContribution:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            myPledged:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            totalFunds:
+              type: integer
+              format: int32
+            totalActiveFunds:
+              type: integer
+              format: int32
+            totalClosedFunds:
+              type: integer
+              format: int32
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetFundsSummaryByIds.GetFundsSummaryByIdsResponse:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetFundsSummaryByIds.FundSummaryDto"
+              nullable: true
+            notFound:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectSpecificGrantsByIds.GetProjectSpecificGrantsByIdsResponse:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetProjectSpecificGrantsByIds.ProjectSpecificGrantDt\
+                  o"
+              nullable: true
+            page:
+              type: integer
+              format: int32
+            pageSize:
+              type: integer
+              format: int32
+            totalItems:
+              type: integer
+              format: int32
+            totalPages:
+              type: integer
+              format: int32
+              readOnly: true
+            notFound:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectSpecificGrantsByIds.ProjectSpecificGrantDto:
+          required:
+            - projectNumber
+          type: object
+          properties:
+            businessPartnerIds:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+            projectNumber:
+              type: string
+              nullable: true
+            approvalNumbers:
+              type: array
+              items:
+                type: string
+              nullable: true
+            projectName:
+              type: string
+              nullable: true
+            type:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.SubPropertyDto"
+            approvedAmount:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            pledgedAmount:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            myContributionUSD:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+            approvalDate:
+              type: string
+              format: date
+              nullable: true
+            sector:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.SubPropertyDto"
+            country:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.SubPropertyDto"
+            status:
+              type: string
+              nullable: true
+            documentUrl:
+              type: string
+              format: uri
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectSpecificGrantsBySectorByIds.GetProjectSpecificGrantsBySectorByIdsResponse:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetProjectSpecificGrantsBySectorByIds.ProjectSpecifi\
+                  cGrantsBySectorGroupDto"
+              nullable: true
+            notFound:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectSpecificGrantsBySectorByIds.ProjectSpecificGrantBySectorItemDto:
+          type: object
+          properties:
+            sectorCode:
+              type: string
+              nullable: true
+            sectorName:
+              type: string
+              nullable: true
+            projectCount:
+              type: integer
+              format: int32
+            percentage:
+              type: number
+              format: double
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectSpecificGrantsBySectorByIds.ProjectSpecificGrantsBySectorGroupDto:
+          type: object
+          properties:
+            businessPartnerIds:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+            sectors:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetProjectSpecificGrantsBySectorByIds.ProjectSpecifi\
+                  cGrantBySectorItemDto"
+              nullable: true
+            totalProjects:
+              type: integer
+              format: int32
+            totalSectors:
+              type: integer
+              format: int32
+            page:
+              type: integer
+              format: int32
+            pageSize:
+              type: integer
+              format: int32
+            totalItems:
+              type: integer
+              format: int32
+            totalPages:
+              type: integer
+              format: int32
+              readOnly: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectSpecificGrantsSummaryByIds.GetProjectSpecificGrantsSummaryByIdsResponse:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetProjectSpecificGrantsSummaryByIds.ProjectSpecific\
+                  GrantSummaryDto"
+              nullable: true
+            notFound:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectSpecificGrantsSummaryByIds.ProjectSpecificGrantSummaryDto:
+          type: object
+          properties:
+            businessPartnerIds:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+            totalProjectsFunded:
+              type: integer
+              format: int32
+            myContributions:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MoneyAmountDto"
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectsByCountryByIds.GetProjectsByCountryByIdsResponse:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetProjectsByCountryByIds.ProjectsByCountriesDto"
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectsByCountryByIds.ProjectsByCountriesDto:
+          type: object
+          properties:
+            businessPartnerIds:
+              type: array
+              items:
+                type: integer
+                format: int32
+              nullable: true
+            totalProjects:
+              type: integer
+              format: int32
+            totalCountries:
+              type: integer
+              format: int32
+            countries:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetProjectsByCountryByIds.ProjectsByCountryDto"
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Features.Donors.V2.GetProjectsByCountryByIds.ProjectsByCountryDto:
+          type: object
+          properties:
+            countryIdbCode:
+              type: string
+              nullable: true
+            countryIsoCode:
+              type: string
+              nullable: true
+            countryName:
+              type: string
+              nullable: true
+            countrySpanishName:
+              type: string
+              nullable: true
+            projectCount:
+              type: integer
+              format: int32
+            percentage:
+              type: number
+              format: double
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Shared.Dtos.MoneyAmountDto:
+          type: object
+          properties:
+            amount:
+              type: number
+              format: double
+            currency:
+              type: string
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Shared.Dtos.MultiLanguageTextDto:
+          type: object
+          properties:
+            en:
+              type: string
+              nullable: true
+            es:
+              type: string
+              nullable: true
+            pt:
+              type: string
+              nullable: true
+            fr:
+              type: string
+              nullable: true
+          additionalProperties: false
+        IDB.RSMB.Business.DonorFunds.Application.Shared.Dtos.SubPropertyDto:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+            code:
+              type: string
+              nullable: true
+            shortCode:
+              type: string
+              nullable: true
+            name:
+              $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Shared.Dto\
+                s.MultiLanguageTextDto"
+          additionalProperties: false
+        Microsoft.AspNetCore.Mvc.ProblemDetails:
+          type: object
+          properties:
+            type:
+              type: string
+              nullable: true
+            title:
+              type: string
+              nullable: true
+            status:
+              type: integer
+              format: int32
+              nullable: true
+            detail:
+              type: string
+              nullable: true
+            instance:
+              type: string
+              nullable: true
+        Microsoft.AspNetCore.Mvc.ValidationProblemDetails:
+          type: object
+          properties:
+            type:
+              type: string
+              nullable: true
+            title:
+              type: string
+              nullable: true
+            status:
+              type: integer
+              format: int32
+              nullable: true
+            detail:
+              type: string
+              nullable: true
+            instance:
+              type: string
+              nullable: true
+            errors:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: string
+              nullable: true
+        PaginatedResponseOfGetFundsByIdsResponseItem:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/components/schemas/IDB.RSMB.Business.DonorFunds.Application.Features.D\
+                  onors.V2.GetFundsByIds.GetFundsByIdsResponseItem"
+              nullable: true
+            page:
+              type: integer
+              format: int32
+            pageSize:
+              type: integer
+              format: int32
+            totalItems:
+              type: integer
+              format: int32
+            totalPages:
+              type: integer
+              format: int32
+              readOnly: true
+          additionalProperties: false
+      securitySchemes:
+        Bearer:
+          type: http
+          description: Enter only the JWT token. Do not include the 'Bearer' prefix.
+          scheme: bearer
+          bearerFormat: JWT
+    tags:
+      - name: Donors
+  meta:
+    id: spc_2089e8ba7e5d41d2a38c63688cb9608f
+    created: 1790695932441
+    modified: 1790695932441
