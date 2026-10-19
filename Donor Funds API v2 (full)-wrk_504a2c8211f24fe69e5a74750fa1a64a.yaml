@@ -11,7 +11,7 @@ collection:
     meta:
       id: fld_57ce4890c2aa49fc878ff5deb86b7b20
       created: 1790264375746
-      modified: 1790264850492
+      modified: 1792437472582
       sortKey: -1000
       description: "Endpoints multi business partner. Scope DonorFundScope / role
         DonorFundRole. businessPartnerIds: max 25, duplicados se ignoran."
@@ -130,7 +130,7 @@ collection:
         meta:
           id: req_84b1cb8284884ab3a8dd5d56a40731d3
           created: 1790264375749
-          modified: 1790964155948
+          modified: 1792438989632
           isPrivate: false
           description: >-
             GET /api/v2/donors/project-specific-grants
@@ -153,7 +153,7 @@ collection:
             value: "600001"
             disabled: true
           - name: consolidate
-            value: "true"
+            value: "FALSE"
             disabled: false
           - name: search
             value: water
@@ -451,6 +451,56 @@ collection:
             send: true
             store: true
           rebuildPath: true
+      - url: "{{ _.baseUrl }}/api/v2/donors/projects/approval-history"
+        name: GET Fund Projects Approval Hisotry
+        meta:
+          id: req_8c6649393d4f4a9c8fa160f8408de208
+          created: 1792439486139
+          modified: 1792439513262
+          isPrivate: false
+          description: >-
+            GET /api/v2/donors/fund-projects-summary
+
+
+            Requeridos: businessPartnerIds y fundCodes (ambos admiten varios
+            valores).
+
+            Opcional: consolidate (def false = un summary por BP; true = un solo
+            summary consolidado).
+
+
+            Respuesta: data[] con businessPartnerIds, fundCodes,
+            totalFundContributions, totalCurrentApproved, totalDisbursed,
+            businessPartnerSummary (myPledged, myContributions).
+          sortKey: -975
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "{{ _.BussinesParnetIds }}"
+            disabled: false
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: fundCodes
+            value: "{{ _.tfFundCode1 }}"
+            disabled: false
+          - name: fundCodes
+            value: ""
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: false
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
     authentication:
       type: oauth2
       grantType: client_credentials
@@ -464,11 +514,19 @@ cookieJar:
   meta:
     id: jar_01bfca5059508a4c47116ec58cab7abb9cd89d5a
     created: 1790264384839
-    modified: 1790962887069
+    modified: 1792437480579
   cookies:
+    - id: 81f564ff-ff42-4769-912d-92b1beeacd87
+      key: stsservicecookie
+      value: estsfd
+      domain: login.microsoftonline.com
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
     - id: d6a87122-7e7d-4658-b3ea-24d711e21513
       key: fpc
-      value: Ajd8I4PeKrRLq7yNxSsmQuxvvbMfAQAAAMbjUeIOAAAA
+      value: Ajd8I4PeKrRLq7yNxSsmQuxvvbMfAQAAAOdjaOIOAAAA
       domain: login.microsoftonline.com
       path: /
       secure: true
@@ -476,14 +534,6 @@ cookieJar:
       hostOnly: true
     - id: 10ffa661-d50a-47ed-8904-18389bc47211
       key: x-ms-gateway-slice
-      value: estsfd
-      domain: login.microsoftonline.com
-      path: /
-      secure: true
-      httpOnly: true
-      hostOnly: true
-    - id: 81f564ff-ff42-4769-912d-92b1beeacd87
-      key: stsservicecookie
       value: estsfd
       domain: login.microsoftonline.com
       path: /
@@ -501,3 +551,11 @@ environments:
     baseUrl: https://api-np-d-app-service-fundscsdf.azurewebsites.net
     token: ""
     fundCode: ""
+  subEnvironments:
+    - name: New Environment
+      meta:
+        id: env_142ef248a671424ab7a555bfe417b32a
+        created: 1792436533683
+        modified: 1792436533683
+        isPrivate: false
+        sortKey: 1792436533683
