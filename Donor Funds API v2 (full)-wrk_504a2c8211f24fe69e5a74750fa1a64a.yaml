@@ -11,17 +11,17 @@ collection:
     meta:
       id: fld_57ce4890c2aa49fc878ff5deb86b7b20
       created: 1790264375746
-      modified: 1792437472582
+      modified: 1792687938038
       sortKey: -1000
       description: "Endpoints multi business partner. Scope DonorFundScope / role
         DonorFundRole. businessPartnerIds: max 25, duplicados se ignoran."
     children:
-      - url: "{{ _.baseUrl }}/api/v2/donors/funds"
+      - url: "{{ _.baseUrlApim }}/api/v2/donors/funds/{{ _.tfFundCode3 }}"
         name: GET Funds
         meta:
           id: req_e27cda13d1e94b2191883d8ad5facd8b
           created: 1790264375747
-          modified: 1790955150113
+          modified: 1792693989901
           isPrivate: false
           description: |-
             GET /api/v2/donors/funds
@@ -33,10 +33,10 @@ collection:
         parameters:
           - name: businessPartnerIds
             value: "{{ _.bpIds4 }}"
-            disabled: false
-          - name: businessPartnerIds
-            value: "600001"
             disabled: true
+          - name: businessPartnerId
+            value: "600168"
+            disabled: false
           - name: consolidate
             value: "true"
             disabled: false
@@ -125,12 +125,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.baseUrl }}/api/v2/donors/project-specific-grants"
+      - url: "{{ _.baseUrlApim }}api/v2/donors/project-specific-grants"
         name: GET Project-Specific Grants
         meta:
           id: req_84b1cb8284884ab3a8dd5d56a40731d3
           created: 1790264375749
-          modified: 1792438989632
+          modified: 1792690552511
           isPrivate: false
           description: >-
             GET /api/v2/donors/project-specific-grants
@@ -240,12 +240,12 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.baseUrl }}/api/v2/donors/project-specific-grants/summary"
+      - url: "{{ _.baseUrlApim }}/api/v2/donors/project-specific-grants/summary"
         name: GET Project-Specific Grants Summary
         meta:
           id: req_d21bbda1bcd04a7e9b6b433110f507f2
           created: 1790264375750
-          modified: 1790264375750
+          modified: 1792690436659
           isPrivate: false
           description: >-
             GET /api/v2/donors/project-specific-grants/summary
@@ -456,7 +456,7 @@ collection:
         meta:
           id: req_8c6649393d4f4a9c8fa160f8408de208
           created: 1792439486139
-          modified: 1792439513262
+          modified: 1792441990691
           isPrivate: false
           description: >-
             GET /api/v2/donors/fund-projects-summary
@@ -490,6 +490,146 @@ collection:
           - name: consolidate
             value: "true"
             disabled: false
+          - name: pagesize
+            value: "40"
+            description: ""
+            disabled: false
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrlApim }}api/v2/funds/{{ _.tfFundCode2 }}/projects"
+        name: GET Projects by Funds
+        meta:
+          id: req_34d1e937f5d147da935815477adfd736
+          created: 1792685267198
+          modified: 1792690790778
+          isPrivate: false
+          description: |-
+            GET /api/v2/donors/funds
+
+            Requerido: businessPartnerIds (repetir el parametro para enviar varios, max 25).
+            Opcionales: consolidate (def false; true consolida los fondos compartidos por Fund Code), search, expand (sectors|fundTotals), fromCreationDate, toCreationDate (M/d/yyyy o yyyy-MM-dd), status (active|terminate|expired), page (def 1), pageSize (def 10, max 50), sortBy (fundName|fundCode|fundType|creationDate|closedDate|fundCurrency|status, def fundName), order (asc|desc, def asc)
+          sortKey: -995
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "{{ _.bpIds4 }}"
+            disabled: true
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: false
+            type: text
+            multiline: false
+          - name: search
+            value: climate
+            disabled: true
+          - name: expand
+            value: sectors
+            disabled: true
+          - name: expand
+            value: fundTotals
+            disabled: true
+          - name: fromCreationDate
+            value: 2020-01-01
+            disabled: true
+          - name: toCreationDate
+            value: 2025-12-31
+            disabled: true
+          - name: status
+            value: active
+            disabled: true
+          - name: sortBy
+            value: creationDate
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
+        headers:
+          - name: Accept
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrlApim
+          }}/api/v2/projects/project-specific-grants/RG-T4797?businessPartnerId\
+          s=[600096,601720]"
+        name: GET PSG Project Details
+        meta:
+          id: req_e194d2e4a7b640dd98e72de7f183d727
+          created: 1792690810759
+          modified: 1792691591581
+          isPrivate: false
+          description: |-
+            GET /api/v2/donors/funds
+
+            Requerido: businessPartnerIds (repetir el parametro para enviar varios, max 25).
+            Opcionales: consolidate (def false; true consolida los fondos compartidos por Fund Code), search, expand (sectors|fundTotals), fromCreationDate, toCreationDate (M/d/yyyy o yyyy-MM-dd), status (active|terminate|expired), page (def 1), pageSize (def 10, max 50), sortBy (fundName|fundCode|fundType|creationDate|closedDate|fundCurrency|status, def fundName), order (asc|desc, def asc)
+          sortKey: -830
+        method: GET
+        parameters:
+          - name: businessPartnerIds
+            value: "{{ _.bpIds4 }}"
+            disabled: true
+          - name: businessPartnerIds
+            value: "600001"
+            disabled: true
+          - name: consolidate
+            value: "true"
+            disabled: false
+            type: text
+            multiline: false
+          - name: search
+            value: climate
+            disabled: true
+          - name: expand
+            value: sectors
+            disabled: true
+          - name: expand
+            value: fundTotals
+            disabled: true
+          - name: fromCreationDate
+            value: 2020-01-01
+            disabled: true
+          - name: toCreationDate
+            value: 2025-12-31
+            disabled: true
+          - name: status
+            value: active
+            disabled: true
+          - name: sortBy
+            value: creationDate
+            disabled: true
+          - name: order
+            value: desc
+            disabled: true
+          - name: page
+            value: "1"
+            disabled: true
+          - name: pageSize
+            value: "10"
+            disabled: true
         headers:
           - name: Accept
             value: application/json
@@ -509,12 +649,17 @@ collection:
       clientId: "{{ _.clientId }}"
       clientSecret: "{{ _.clientSecret }}"
       scope: "{{ _.scope }}"
+    headers:
+      - name: Ocp-Apim-Subscription-Key
+        value: "{{ _.SubscriptionKey }}"
+        description: ""
+        disabled: false
 cookieJar:
   name: Default Jar
   meta:
     id: jar_01bfca5059508a4c47116ec58cab7abb9cd89d5a
     created: 1790264384839
-    modified: 1792437480579
+    modified: 1792690450587
   cookies:
     - id: 81f564ff-ff42-4769-912d-92b1beeacd87
       key: stsservicecookie
@@ -526,7 +671,7 @@ cookieJar:
       hostOnly: true
     - id: d6a87122-7e7d-4658-b3ea-24d711e21513
       key: fpc
-      value: Ajd8I4PeKrRLq7yNxSsmQuxvvbMfAQAAAOdjaOIOAAAA
+      value: Ajd8I4PeKrRLq7yNxSsmQuxvvbMfAQAAABBAbOIOAAAA
       domain: login.microsoftonline.com
       path: /
       secure: true

@@ -11,7 +11,7 @@ environments:
   meta:
     id: env_0de5445932028b919d50cf4471dc4fbb644b4727
     created: 1790264447302
-    modified: 1792438711968
+    modified: 1792685509811
     isPrivate: false
   data:
     baseUrl: ""
@@ -45,29 +45,33 @@ environments:
       meta:
         id: env_c7c7c26d801448d3803141f904a3cd8d
         created: 1790264668560
-        modified: 1790264728801
+        modified: 1792688432891
         isPrivate: false
         sortKey: 1790264668560
       data:
         baseUrl: https://api-np-d-app-service-fundscsdf.azurewebsites.net/
+        baseUrlApim: https://apim-np-d-idb-integration.iadb.org/api/idb-funds/v2/
         token: ""
         tenantId: 9dfb1a05-5f1d-449a-8960-62abcb479e7d
         clientId: 52018dcb-c01e-48dd-b76a-bdd44262c568
         clientSecret: g9h8Q~D-on4gJ74w1RAK7R6oKLlJOy7SPKPYodvn
         scope: api://b6c34eff-f6a4-4db4-8ef5-50adcc07f85a/.default
         tokenUrl: https://login.microsoftonline.com/9dfb1a05-5f1d-449a-8960-62abcb479e7d/oauth2/v2.0/token
+        SubscriptionKey: 6199de850b354a408d1a8321c0aad9b2
     - name: test
       meta:
         id: env_4f121b558d9b4203a60fc9290759ac78
         created: 1790264689371
-        modified: 1790264747061
+        modified: 1792688900409
         isPrivate: false
-        sortKey: 1790264689371
+        sortKey: 1790264689372
       data:
         baseUrl: https://api-np-d-app-service-fundscsdf.azurewebsites.net/
+        baseUrlApim: https://apim-np-t-idb-integration.iadb.org/api/idb-funds/v2/
         token: ""
         tenantId: 9dfb1a05-5f1d-449a-8960-62abcb479e7d
         clientId: 2c6fd093-623e-4106-8970-13316118f6f8
         clientSecret: Wws8Q~ZFFH3bedg31aoLHdRxdHOw374KFNRCvdgm
         scope: api://257bae25-2485-40d4-8ff1-4993b70ad9f9/.default
         tokenUrl: https://login.microsoftonline.com/9dfb1a05-5f1d-449a-8960-62abcb479e7d/oauth2/v2.0/token
+        SubscriptionKey: ee193c5991264407be35f26284222db2
